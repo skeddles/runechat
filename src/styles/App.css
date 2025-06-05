@@ -46,11 +46,13 @@ body {
 
 
 h1 {
-	font-size: 2rem
+	font-family: 'RuneScapeBold', system-ui, -apple-system, sans-serif;
+	font-size: 1rem;
 }
 
 h2 {
-	font-size: 2rem;
+	font-family: 'RuneScapeBold', system-ui, -apple-system, sans-serif;
+	font-size: 1rem;
 	margin: 0;
 	flex-shrink: 0;
 }
