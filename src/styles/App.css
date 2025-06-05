@@ -547,18 +547,32 @@ button.standard {
 }
 
 .create-room-form {
-
 	display: flex;
 	flex-direction: column;
 	gap: 0.5rem;
 	flex-shrink: 0;
+	margin-top: auto;
 
 	& input {
-		padding: 0.5rem;
-		border: 1px solid #333;
-		border-radius: 4px;
-		background-color: #2a2a2a;
+		padding: 0.25rem;
+		border: none;
+		background: transparent;
 		color: white;
+		font-family: 'RuneScapeBold', system-ui, -apple-system, sans-serif;
+		-webkit-font-smoothing: none;
+		-moz-osx-font-smoothing: none;
+		text-shadow: 1px 1px 0 #000;
+	}
+
+	& label {
+		font-family: 'RuneScapeBold', system-ui, -apple-system, sans-serif;
+		color: white;
+		-webkit-font-smoothing: none;
+		-moz-osx-font-smoothing: none;
+		text-shadow: 1px 1px 0 #000;
+		display: flex;
+		align-items: baseline;
+		gap: 0.5rem;
 	}
 }
 

@@ -191,15 +191,6 @@ function Chat({ username, onShowToast, showWelcomeToast }: ChatProps) {
 		<div className="chat-container">
 			<div className="rooms-panel">
 				<h2>Worlds</h2>
-				<form onSubmit={handleCreateRoom} className="create-room-form">
-					<input
-						type="text"
-						value={newRoomName}
-						onChange={(e) => setNewRoomName(e.target.value)}
-						placeholder="New room name"
-					/>
-					<button type="submit" className="standard">Create</button>
-				</form>
 				<div className="room-list">
 					<table className="room-table">
 						<thead>
@@ -250,6 +241,18 @@ function Chat({ username, onShowToast, showWelcomeToast }: ChatProps) {
 						</tbody>
 					</table>
 				</div>
+				<form onSubmit={handleCreateRoom} className="create-room-form">
+					<label>
+						Name:
+						<input
+							type="text"
+							value={newRoomName}
+							onChange={(e) => setNewRoomName(e.target.value)}
+							placeholder="New room name"
+						/>
+					</label>
+					<button type="submit" className="standard">Create</button>
+				</form>
 			</div>
 
 			<div className="column-separator">
