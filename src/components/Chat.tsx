@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
-
 interface ChatProps {
 	username: string;
 }
@@ -225,6 +224,7 @@ function Chat({ username }: ChatProps) {
 						</div>
 					))}
 				</div>
+				<button className="report-button">Report Abuse</button>
 			</div>
 		</div>
 	);

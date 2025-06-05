@@ -267,6 +267,39 @@ button.standard {
 	}
 }
 
+.users-panel {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+
+	.user-list {
+		flex: 1;
+		overflow-y: auto;
+	}
+
+	.report-button {
+		width: 79px;
+		height: 22px;
+		margin: 10px auto;
+		padding: 0;
+		border: none;
+		background: url('/report-button.png') no-repeat;
+		background-position: 0 0;
+		cursor: pointer;
+		color: white;
+		border: none;
+		border-radius: 0;
+		font-family: 'RuneScapeSmall', system-ui, -apple-system, sans-serif;
+		font-size: 1rem;
+	}
+
+	.report-button:hover {
+		background-position: 0 -22px;
+	}
+
+
+}
+
 
 .message {
 	margin-bottom: 0.5rem;
