@@ -122,7 +122,7 @@ function Chat({ username }: ChatProps) {
 						onChange={(e) => setNewRoomName(e.target.value)}
 						placeholder="New room name"
 					/>
-					<button type="submit">Create Room</button>
+					<button type="submit">Create</button>
 				</form>
 				<div className="room-list">
 					{rooms.map(room => (
