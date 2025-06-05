@@ -307,6 +307,10 @@ button.standard {
 	border-radius: 4px;
 	display: flex;
 	flex-direction: column;
+	font-family: 'RuneScapeBold', system-ui, -apple-system, sans-serif;
+	-webkit-font-smoothing: none;
+	-moz-osx-font-smoothing: none;
+	text-shadow: 1px 1px 0 #000;
 }
 
 .message-user {
@@ -402,6 +406,11 @@ button.standard {
 	-webkit-font-smoothing: none;
 	-moz-osx-font-smoothing: none;
 	color: #fbff4a;
+	text-shadow: 1px 1px 0 #000;
+
+	span {
+		font-family: 'RuneScapeBold', system-ui, -apple-system, sans-serif;
+	}
 }
 
 .column-separator {
