@@ -19,6 +19,30 @@ interface Room {
 	isPublic: boolean;
 }
 
+// Text effect types
+type TextEffect = 'wave' | 'scroll' | 'slide' | 'flash1' | 'flash2' | 'flash3' | 'glow1' | 'glow2' | 'glow3';
+
+// Function to process message content and extract effect
+function processMessageContent(content: string): { effect: TextEffect | null; text: string } {
+	const effectMatch = content.match(/^(wave|scroll|slide|flash1|flash2|flash3|glow1|glow2|glow3):/);
+	if (effectMatch) {
+		return {
+			effect: effectMatch[1] as TextEffect,
+			text: content.slice(effectMatch[0].length).trim()
+		};
+	}
+	return { effect: null, text: content };
+}
+
+// Function to split text into characters for wave effect
+function splitTextIntoChars(text: string): JSX.Element[] {
+	return text.split('').map((char, index) => (
+		<span key={index} className={`char${index + 1}`}>
+			{char}
+		</span>
+	));
+}
+
 function Chat({ username }: ChatProps) {
 	const [messages, setMessages] = useState<Message[]>([]);
 	const [rooms, setRooms] = useState<Room[]>([]);
@@ -111,6 +135,28 @@ function Chat({ username }: ChatProps) {
 		}
 	};
 
+	const renderMessageContent = (content: string) => {
+		const { effect, text } = processMessageContent(content);
+
+		if (!effect) {
+			return <span>{text}</span>;
+		}
+
+		if (effect === 'wave') {
+			return (
+				<span className="text-effect wave">
+					{splitTextIntoChars(text)}
+				</span>
+			);
+		}
+
+		return (
+			<span className={`text-effect ${effect}`}>
+				{text}
+			</span>
+		);
+	};
+
 	return (
 		<div className="chat-container">
 			<div className="rooms-panel">
@@ -147,7 +193,9 @@ function Chat({ username }: ChatProps) {
 					{messages.map((message, index) => (
 						<div key={index} className="message">
 							<span className="message-user">{message.user}</span>
-							<span className="message-content">{message.content}</span>
+							<span className="message-content">
+								{renderMessageContent(message.content)}
+							</span>
 						</div>
 					))}
 					<div ref={messagesEndRef} />
