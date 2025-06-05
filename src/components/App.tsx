@@ -1,8 +1,9 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import Login from './components/Login';
-import Chat from './components/Chat';
-import './App.css';
+import Login from './Login';
+import Chat from './Chat';
+import '../styles/App.css';
+import '../styles/text-effects.css';
 
 function App() {
 	const [username, setUsername] = useState<string | null>(null);
