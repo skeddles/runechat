@@ -236,17 +236,37 @@ button.standard {
 	display: flex;
 	flex-direction: column;
 	height: 100%;
+
+	.messages {
+		flex: 1;
+		padding: 1rem;
+		overflow-y: auto;
+		display: flex;
+		flex-direction: column;
+		min-height: 0;
+		height: 100%;
+	}
+
+	.message-form {
+		display: flex;
+		gap: 0.25rem;
+		border: 32px solid transparent;
+		border-image: url('/chatbox-frame.png') 32 repeat;
+		background-color: #2a2a2a;
+		background-image: url('/chatbox-bg.png');
+		background-repeat: repeat;
+
+		& input {
+			flex: 1;
+			padding: 0.25rem;
+			border: none;
+			background: transparent;
+			color: #0000ff;
+			min-width: 0;
+		}
+	}
 }
 
-.messages {
-	flex: 1;
-	padding: 1rem;
-	overflow-y: auto;
-	display: flex;
-	flex-direction: column;
-	min-height: 0;
-	height: 100%;
-}
 
 .message {
 	margin-bottom: 0.5rem;
@@ -258,27 +278,7 @@ button.standard {
 
 .message-user {
 	font-weight: bold;
-
 	margin-right: 0.5rem;
-}
-
-.message-form {
-	display: flex;
-	gap: 0.25rem;
-	border: 32px solid transparent;
-	border-image: url('/chatbox-frame.png') 32 repeat;
-	background-color: #2a2a2a;
-	background-image: url('/chatbox-bg.png');
-	background-repeat: repeat;
-}
-
-.message-form input {
-	flex: 1;
-	padding: 0.25rem;
-	border: none;
-	background: transparent;
-	color: #0000ff;
-	min-width: 0;
 }
 
 .room-list,
@@ -299,13 +299,15 @@ button.standard {
 	transition: background-color 0.2s;
 }
 
-.room-item:hover {
-	background-color: rgba(255, 255, 255, 0.1);
-}
+.room-item {
+	&:hover {
+		background-color: rgba(255, 255, 255, 0.1);
+	}
 
-.room-item.active {
-	background-color: #646cff;
-	font-weight: bold;
+	&.active {
+		background-color: #646cff;
+		font-weight: bold;
+	}
 }
 
 .create-room-form {
@@ -315,15 +317,17 @@ button.standard {
 	flex-direction: column;
 	gap: 0.5rem;
 	flex-shrink: 0;
+
+	& input {
+		padding: 0.5rem;
+		border: 1px solid #333;
+		border-radius: 4px;
+		background-color: #2a2a2a;
+		color: white;
+	}
 }
 
-.create-room-form input {
-	padding: 0.5rem;
-	border: 1px solid #333;
-	border-radius: 4px;
-	background-color: #2a2a2a;
-	color: white;
-}
+
 
 .room-item {
 	padding: 0.5rem;
@@ -331,15 +335,17 @@ button.standard {
 	border-radius: 4px;
 	cursor: pointer;
 	transition: background-color 0.2s;
+
+	&:hover {
+		background-color: rgba(255, 255, 255, 0.1);
+	}
+
+	&.active {
+		background-color: #646cff;
+	}
 }
 
-.room-item:hover {
-	background-color: rgba(255, 255, 255, 0.1);
-}
 
-.room-item.active {
-	background-color: #646cff;
-}
 
 .public-badge {
 	font-size: 0.8em;
