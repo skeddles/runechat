@@ -153,7 +153,7 @@ function Chat({ username }: ChatProps) {
 						type="text"
 						value={newMessage}
 						onChange={(e) => setNewMessage(e.target.value)}
-						placeholder="Type a message..."
+						placeholder="*"
 					/>
 					<button type="submit">Send</button>
 				</form>
