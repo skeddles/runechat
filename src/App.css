@@ -209,14 +209,15 @@ button.standard {
 /* Chat styles */
 .chat-container {
 	display: grid;
-	grid-template-columns: 250px 1fr 200px;
+	grid-template-columns: 250px 18px 1fr 18px 200px;
 	height: 100vh;
+	color: white;
+	overflow: hidden;
 }
 
 .rooms-panel,
 .users-panel {
 	padding: 1rem;
-	border-right: 1px solid #dee2e6;
 	overflow-y: auto;
 	background-image: url('/sidebar-bg-repeating.png');
 	background-repeat: repeat;
@@ -228,7 +229,6 @@ button.standard {
 	display: flex;
 	flex-direction: column;
 	height: 100%;
-	border-right: 1px solid #333;
 	overflow: hidden;
 }
 
@@ -236,14 +236,6 @@ button.standard {
 	display: flex;
 	flex-direction: column;
 	height: 100%;
-}
-
-.chat-container {
-	display: grid;
-	grid-template-columns: 250px 1fr 200px;
-	height: 100vh;
-	color: white;
-	overflow: hidden;
 }
 
 .messages {
@@ -371,4 +363,56 @@ button.standard {
 	-webkit-font-smoothing: none;
 	-moz-osx-font-smoothing: none;
 	color: #fbff4a;
+}
+
+.column-separator {
+	width: 26px;
+	height: 100%;
+	position: relative;
+	z-index: 1;
+	margin: 0 -4px;
+
+
+	&::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		height: 22px;
+		background-image: url('/column-separator-ends.png');
+		background-position: 0 0;
+		background-repeat: no-repeat;
+		background-size: 25px 28px;
+		background-clip: content-box;
+		clip-path: inset(0 0 calc(100% - 22px) 0);
+	}
+
+	&::after {
+		content: '';
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		height: 7px;
+		background-image: url('/column-separator-ends.png');
+		background-position: 0 -21px;
+		background-repeat: no-repeat;
+		background-size: 25px 28px;
+		background-clip: content-box;
+		clip-path: inset(calc(100% - 7px) 0 0 0);
+	}
+
+	.middle {
+		position: absolute;
+		top: 22px;
+		bottom: 7px;
+		left: 0;
+		right: 0;
+		background-image: url('/column-separator-middle.png');
+		background-position: 0 0;
+		background-repeat: repeat-y;
+		background-size: 26px auto;
+	}
+
 }

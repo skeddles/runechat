@@ -138,6 +138,10 @@ function Chat({ username }: ChatProps) {
 				</div>
 			</div>
 
+			<div className="column-separator">
+				<div className="middle" />
+			</div>
+
 			<div className="chat-panel">
 				<div className="messages">
 					{messages.map((message, index) => (
@@ -158,6 +162,10 @@ function Chat({ username }: ChatProps) {
 					/>
 					<button type="submit" className="standard">Send</button>
 				</form>
+			</div>
+
+			<div className="column-separator">
+				<div className="middle" />
 			</div>
 
 			<div className="users-panel">
