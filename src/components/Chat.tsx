@@ -114,7 +114,7 @@ function Chat({ username }: ChatProps) {
 	return (
 		<div className="chat-container">
 			<div className="rooms-panel">
-				<h2>Chat Rooms</h2>
+				<h2>Worlds</h2>
 				<form onSubmit={handleCreateRoom} className="create-room-form">
 					<input
 						type="text"
@@ -122,7 +122,7 @@ function Chat({ username }: ChatProps) {
 						onChange={(e) => setNewRoomName(e.target.value)}
 						placeholder="New room name"
 					/>
-					<button type="submit">Create</button>
+					<button type="submit" className="standard">Create</button>
 				</form>
 				<div className="room-list">
 					{rooms.map(room => (
@@ -156,12 +156,12 @@ function Chat({ username }: ChatProps) {
 						onChange={(e) => setNewMessage(e.target.value)}
 						placeholder="*"
 					/>
-					<button type="submit">Send</button>
+					<button type="submit" className="standard">Send</button>
 				</form>
 			</div>
 
 			<div className="users-panel">
-				<h2>Users in Room</h2>
+				<h2>Players</h2>
 				<div className="user-list">
 					{users.map(user => (
 						<div key={user} className="user-item">
