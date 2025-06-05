@@ -149,6 +149,7 @@ function Chat({ username }: ChatProps) {
 					<div ref={messagesEndRef} />
 				</div>
 				<form onSubmit={handleSendMessage} className="message-form">
+					<span style={{ color: 'black', display: 'inline-flex', alignItems: 'center', height: '100%' }}>{username}:</span>
 					<input
 						type="text"
 						value={newMessage}
