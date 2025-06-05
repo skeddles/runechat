@@ -142,7 +142,7 @@ function Chat({ username }: ChatProps) {
         <div className="messages">
           {messages.map((message, index) => (
             <div key={index} className="message">
-              <span className="message-user">{message.user}:</span>
+              <span className="message-user">{message.user}</span>
               <span className="message-content">{message.content}</span>
             </div>
           ))}
