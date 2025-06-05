@@ -18,6 +18,9 @@ interface Room {
 	id: string;
 	userCount: number;
 	isPublic: boolean;
+	starId: number;
+	worldId: number;
+	flagId: number;
 }
 
 // Text effect types
@@ -51,6 +54,10 @@ function Chat({ username, onShowToast, showWelcomeToast }: ChatProps) {
 	const [newMessage, setNewMessage] = useState('');
 	const [newRoomName, setNewRoomName] = useState('');
 	const [ws, setWs] = useState<WebSocket | null>(null);
+	const [sortConfig, setSortConfig] = useState<{ key: keyof Room; direction: 'asc' | 'desc' }>({
+		key: 'worldId',
+		direction: 'asc'
+	});
 	const messagesEndRef = useRef<HTMLDivElement>(null);
 	const { roomId } = useParams();
 	const navigate = useNavigate();
@@ -141,6 +148,23 @@ function Chat({ username, onShowToast, showWelcomeToast }: ChatProps) {
 		}
 	};
 
+	const handleSort = (key: keyof Room) => {
+		setSortConfig(prev => ({
+			key,
+			direction: prev.key === key && prev.direction === 'asc' ? 'desc' : 'asc'
+		}));
+	};
+
+	const sortedRooms = [...rooms].sort((a, b) => {
+		if (a[sortConfig.key] < b[sortConfig.key]) {
+			return sortConfig.direction === 'asc' ? -1 : 1;
+		}
+		if (a[sortConfig.key] > b[sortConfig.key]) {
+			return sortConfig.direction === 'asc' ? 1 : -1;
+		}
+		return 0;
+	});
+
 	const renderMessageContent = (content: string) => {
 		const { effect, text } = processMessageContent(content);
 
@@ -177,16 +201,54 @@ function Chat({ username, onShowToast, showWelcomeToast }: ChatProps) {
 					<button type="submit" className="standard">Create</button>
 				</form>
 				<div className="room-list">
-					{rooms.map(room => (
-						<div
-							key={room.id}
-							className={`room-item ${room.id === roomId ? 'active' : ''} ${room.isPublic ? 'public-room' : ''}`}
-							onClick={() => handleJoinRoom(room.id)}
-						>
-							{room.id} ({room.userCount} users)
-							{room.isPublic && <span className="public-badge">Public</span>}
-						</div>
-					))}
+					<table className="room-table">
+						<thead>
+							<tr>
+								<th onClick={() => handleSort('starId')}>
+									<span className={`sort-icon ${sortConfig.key === 'starId' ? `active ${sortConfig.direction}` : ''}`} />
+								</th>
+								<th onClick={() => handleSort('worldId')}>
+									<span className={`sort-icon ${sortConfig.key === 'worldId' ? `active ${sortConfig.direction}` : ''}`} />
+								</th>
+								<th onClick={() => handleSort('flagId')}>
+									<span className={`sort-icon ${sortConfig.key === 'flagId' ? `active ${sortConfig.direction}` : ''}`} />
+								</th>
+								<th onClick={() => handleSort('userCount')}>
+									<span className={`sort-icon ${sortConfig.key === 'userCount' ? `active ${sortConfig.direction}` : ''}`} />
+								</th>
+								<th onClick={() => handleSort('id')}>
+									<span className={`sort-icon ${sortConfig.key === 'id' ? `active ${sortConfig.direction}` : ''}`} />
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							{sortedRooms.map(room => (
+								<tr
+									key={room.id}
+									className={`room-item ${room.id === roomId ? 'active' : ''}`}
+									onClick={() => handleJoinRoom(room.id)}
+								>
+									<td>
+										<span className="room-star" data-star={room.starId} />
+									</td>
+									<td>
+										<span className="room-world-id" data-star={room.starId}>
+											{room.worldId}
+										</span>
+									</td>
+									<td>
+										<span className="room-flag" data-flag={room.flagId} />
+									</td>
+									<td>
+										<span className="room-user-count">{room.userCount}</span>
+									</td>
+									<td>
+										<span className="room-name">{room.id}</span>
+									</td>
+								</tr>
+							))}
+						</tbody>
+					</table>
 				</div>
 			</div>
 

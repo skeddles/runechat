@@ -8,18 +8,35 @@ const wss = new WebSocketServer({ server });
 // Store chat rooms and their data
 const chatRooms = new Map();
 
+// Track used world IDs
+const usedWorldIds = new Set();
+
 // Initialize public room
 chatRooms.set('public', {
 	clients: new Set(),
 	users: new Map(),
 	messages: [],
 	lastActivity: Date.now(),
-	isPublic: true
+	isPublic: true,
+	starId: 1,
+	worldId: 1,
+	flagId: 0
 });
+usedWorldIds.add(1);
 
 // Cleanup intervals
 const USER_TIMEOUT = 5 * 60 * 1000; // 5 minutes
 const ROOM_TIMEOUT = 60 * 60 * 1000; // 1 hour
+
+// Helper function to get next available world ID
+function getNextWorldId() {
+	let id = 1;
+	while (usedWorldIds.has(id)) {
+		id++;
+	}
+	usedWorldIds.add(id);
+	return id;
+}
 
 // Helper function to broadcast to all clients in a room
 function broadcastToRoom(roomId, message, excludeClient = null) {
@@ -33,19 +50,22 @@ function broadcastToRoom(roomId, message, excludeClient = null) {
 	}
 }
 
-// Helper function to update room list for all clients
+// Helper function to broadcast room list for all clients
 function broadcastRoomList() {
 	const roomList = Array.from(chatRooms.keys())
 		.map(roomId => ({
 			id: roomId,
 			userCount: chatRooms.get(roomId).clients.size,
-			isPublic: chatRooms.get(roomId).isPublic || false
+			isPublic: chatRooms.get(roomId).isPublic || false,
+			starId: chatRooms.get(roomId).starId || 0,
+			worldId: chatRooms.get(roomId).worldId,
+			flagId: chatRooms.get(roomId).flagId
 		}))
 		.sort((a, b) => {
 			// Public room always first
 			if (a.isPublic) return -1;
 			if (b.isPublic) return 1;
-			return 0;
+			return a.worldId - b.worldId;
 		});
 
 	wss.clients.forEach(client => {
@@ -117,7 +137,10 @@ wss.on('connection', (ws) => {
 						users: new Map(),
 						messages: [],
 						lastActivity: Date.now(),
-						isPublic: false
+						isPublic: false,
+						starId: 0,
+						worldId: getNextWorldId(),
+						flagId: Math.floor(Math.random() * 5)
 					});
 				}
 
@@ -160,7 +183,10 @@ wss.on('connection', (ws) => {
 					users: new Map(),
 					messages: [],
 					lastActivity: Date.now(),
-					isPublic: false
+					isPublic: false,
+					starId: 0,
+					worldId: getNextWorldId(),
+					flagId: Math.floor(Math.random() * 5)
 				});
 
 				broadcastRoomList();
@@ -205,6 +231,7 @@ wss.on('connection', (ws) => {
 					setTimeout(() => {
 						const roomToCheck = chatRooms.get(currentRoom);
 						if (roomToCheck && roomToCheck.clients.size === 0) {
+							usedWorldIds.delete(roomToCheck.worldId);
 							chatRooms.delete(currentRoom);
 							broadcastRoomList();
 						}
