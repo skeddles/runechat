@@ -15,6 +15,7 @@ interface Message {
 interface Room {
   id: string;
   userCount: number;
+  isPublic: boolean;
 }
 
 function Chat({ username }: ChatProps) {
@@ -35,6 +36,9 @@ function Chat({ username }: ChatProps) {
       websocket.send(JSON.stringify({ type: 'setUsername', username }));
       if (roomId) {
         websocket.send(JSON.stringify({ type: 'joinRoom', roomId }));
+      } else {
+        websocket.send(JSON.stringify({ type: 'joinRoom', roomId: 'public' }));
+        navigate('/chat/public');
       }
     };
 
@@ -123,10 +127,11 @@ function Chat({ username }: ChatProps) {
           {rooms.map(room => (
             <div
               key={room.id}
-              className={`room-item ${room.id === roomId ? 'active' : ''}`}
+              className={`room-item ${room.id === roomId ? 'active' : ''} ${room.isPublic ? 'public-room' : ''}`}
               onClick={() => handleJoinRoom(room.id)}
             >
               {room.id} ({room.userCount} users)
+              {room.isPublic && <span className="public-badge">Public</span>}
             </div>
           ))}
         </div>

@@ -8,6 +8,15 @@ const wss = new WebSocketServer({ server });
 // Store chat rooms and their data
 const chatRooms = new Map();
 
+// Initialize public room
+chatRooms.set('public', {
+  clients: new Set(),
+  users: new Map(),
+  messages: [],
+  lastActivity: Date.now(),
+  isPublic: true
+});
+
 // Cleanup intervals
 const USER_TIMEOUT = 5 * 60 * 1000; // 5 minutes
 const ROOM_TIMEOUT = 60 * 60 * 1000; // 1 hour
@@ -26,10 +35,18 @@ function broadcastToRoom(roomId, message, excludeClient = null) {
 
 // Helper function to update room list for all clients
 function broadcastRoomList() {
-  const roomList = Array.from(chatRooms.keys()).map(roomId => ({
-    id: roomId,
-    userCount: chatRooms.get(roomId).clients.size
-  }));
+  const roomList = Array.from(chatRooms.keys())
+    .map(roomId => ({
+      id: roomId,
+      userCount: chatRooms.get(roomId).clients.size,
+      isPublic: chatRooms.get(roomId).isPublic || false
+    }))
+    .sort((a, b) => {
+      // Public room always first
+      if (a.isPublic) return -1;
+      if (b.isPublic) return 1;
+      return 0;
+    });
 
   wss.clients.forEach(client => {
     if (client.readyState === WebSocket.OPEN) {
@@ -53,7 +70,7 @@ wss.on('connection', (ws) => {
     userTimeout = setTimeout(() => {
       if (currentRoom && currentUser) {
         const room = chatRooms.get(currentRoom);
-        if (room) {
+        if (room && !room.isPublic) { // Don't remove users from public room
           room.users.delete(currentUser);
           broadcastToRoom(currentRoom, {
             type: 'userList',
@@ -99,7 +116,8 @@ wss.on('connection', (ws) => {
             clients: new Set(),
             users: new Map(),
             messages: [],
-            lastActivity: Date.now()
+            lastActivity: Date.now(),
+            isPublic: false
           });
         }
 
@@ -141,7 +159,8 @@ wss.on('connection', (ws) => {
           clients: new Set(),
           users: new Map(),
           messages: [],
-          lastActivity: Date.now()
+          lastActivity: Date.now(),
+          isPublic: false
         });
 
         broadcastRoomList();
@@ -181,8 +200,8 @@ wss.on('connection', (ws) => {
           users: Array.from(room.users.keys())
         });
 
-        // Check if room is empty and set timeout for deletion
-        if (room.clients.size === 0) {
+        // Check if room is empty and set timeout for deletion (except for public room)
+        if (room.clients.size === 0 && !room.isPublic) {
           setTimeout(() => {
             const roomToCheck = chatRooms.get(currentRoom);
             if (roomToCheck && roomToCheck.clients.size === 0) {
