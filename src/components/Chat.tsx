@@ -3,6 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 
 interface ChatProps {
 	username: string;
+	onShowToast: (message: string) => void;
+	showWelcomeToast: () => void;
 }
 
 interface Message {
@@ -42,7 +44,7 @@ function splitTextIntoChars(text: string): JSX.Element[] {
 	));
 }
 
-function Chat({ username }: ChatProps) {
+function Chat({ username, onShowToast, showWelcomeToast }: ChatProps) {
 	const [messages, setMessages] = useState<Message[]>([]);
 	const [rooms, setRooms] = useState<Room[]>([]);
 	const [users, setUsers] = useState<string[]>([]);
@@ -52,6 +54,10 @@ function Chat({ username }: ChatProps) {
 	const messagesEndRef = useRef<HTMLDivElement>(null);
 	const { roomId } = useParams();
 	const navigate = useNavigate();
+
+	useEffect(() => {
+		showWelcomeToast();
+	}, []);
 
 	useEffect(() => {
 		const websocket = new WebSocket('ws://localhost:3001');
@@ -131,6 +137,7 @@ function Chat({ username }: ChatProps) {
 			}));
 			setNewRoomName('');
 			handleJoinRoom(roomId);
+			onShowToast(`You created a new world called <strong>${roomId}</strong>`);
 		}
 	};
 
