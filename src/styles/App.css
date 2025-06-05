@@ -237,6 +237,21 @@ button.standard {
 	flex-direction: column;
 	height: 100%;
 
+	.chat-header {
+		height: 24px;
+		background-color: #3e3529;
+		border-bottom: 1px solid #685b43;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-shrink: 0;
+		font-family: 'RuneScapeBold', system-ui, -apple-system, sans-serif;
+		color: #fe981f;
+		text-shadow: 1px 1px 0 #000;
+		-webkit-font-smoothing: none;
+		-moz-osx-font-smoothing: none;
+	}
+
 	.messages {
 		flex: 1;
 		padding: 1rem;

@@ -195,6 +195,9 @@ function Chat({ username, onShowToast, showWelcomeToast }: ChatProps) {
 			</div>
 
 			<div className="chat-panel">
+				<div className="chat-header">
+					Current World - {roomId || 'public'}
+				</div>
 				<div className="messages">
 					{messages.map((message, index) => (
 						<div key={index} className="message">
