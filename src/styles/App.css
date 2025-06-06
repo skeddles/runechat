@@ -833,6 +833,12 @@ button.standard {
 	height: 100vh;
 	justify-content: center;
 
+	.loading-logo {
+		width: 200px;
+		height: auto;
+		margin-bottom: 2rem;
+	}
+
 	h1 {
 		text-align: center;
 		font-size: 1rem;

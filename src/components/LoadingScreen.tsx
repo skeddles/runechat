@@ -173,6 +173,7 @@ function LoadingScreen({ onLoadComplete }: LoadingScreenProps) {
 	return (
 		<div className="login-container">
 			<div className="loading-screen">
+				<img src="/icons/logo.png" alt="RuneChat Logo" className="loading-logo" />
 				<h1>RuneChat is loading - please wait...</h1>
 				<div className="loading-bar-container">
 					<div
