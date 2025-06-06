@@ -68,8 +68,11 @@ function LoadingScreen({ onLoadComplete }: LoadingScreenProps) {
 
 				await new Promise((resolve, reject) => {
 					ws.onopen = resolve;
-					ws.onerror = reject;
-					setTimeout(() => reject(new Error('Failed to connect to server')), 5000);
+					ws.onerror = (event) => {
+						console.error('WebSocket connection error:', event);
+						reject(new Error(`Failed to connect to server at ${wsUrl}. Please check if the server is running and the URL is correct.`));
+					};
+					setTimeout(() => reject(new Error(`Connection timeout - server at ${wsUrl} did not respond within 5 seconds`)), 5000);
 				});
 
 				ws.close();
@@ -85,7 +88,8 @@ function LoadingScreen({ onLoadComplete }: LoadingScreenProps) {
 				await new Promise(resolve => setTimeout(resolve, 1000));
 				onLoadComplete();
 			} catch (err) {
-				setError(err instanceof Error ? err.message : 'An unknown error occurred');
+				console.error('Loading error:', err);
+				setError(err instanceof Error ? err.message : 'An unknown error occurred during loading');
 			}
 		};
 
