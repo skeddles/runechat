@@ -7,9 +7,12 @@ alwaysApply: true
 - whenever any font, image or audio asset is added, it must be added to the list of files on the loading screen
 - all CSS should be placed within App.css
 - CSS should be nested to mimic the hierarchy of HTML elements when possible
-- When nesting an element that does not have a class name, you must put "& " before the element name
+- When nesting an element selector (like div, p, span, button, etc.) that does not have a class name, you must put "& " before the element name.
 - Add tooltips to interactive elements when appropriate
 
 
-[LoadingScreen.tsx](mdc:src/components/LoadingScreen.tsx) [Tooltip.tsx](mdc:src/components/Tooltip.tsx) [App.css](mdc:\styles\App.css) [App.tsx](mdc:src/components/App.tsx)
+[LoadingScreen.tsx](mdc:src/components/LoadingScreen.tsx) [Tooltip.tsx](mdc:src/components/Tooltip.tsx) [App.css](mdc:styles/App.css) [App.tsx](mdc:src/components/App.tsx)
+
+
+
 

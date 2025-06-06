@@ -42,11 +42,11 @@
 	position: relative;
 	z-index: 1;
 	margin-bottom: -8px;
-}
 
-.tab-button img {
-	width: 33px;
-	height: 36px;
+	& img {
+		width: 33px;
+		height: 36px;
+	}
 }
 
 /* Top tab styles */

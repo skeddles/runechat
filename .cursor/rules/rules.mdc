@@ -1,0 +1,46 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Cursor Rules
+
+## Rule Types
+- Project Rules: `.cursor/rules/*.mdc` - version-controlled, scoped to codebase
+- User Rules: Settings > Rules - global to Cursor
+- Memories: Auto-generated from conversations (beta)
+- Legacy: `.cursorrules` (deprecated)
+
+## Rule Behavior
+- Always: Always in context
+- Auto: Attached when files match glob pattern
+- Agent: AI decides (needs description)
+- Manual: Use @ruleName to include
+
+## Creating Rules
+1. `Cmd + Shift + P` > "New Cursor Rule"
+2. Or Settings > Rules
+3. Or `/Generate Cursor Rules` in chat
+
+## Rule Structure
+```mdc
+---
+description: What this rule does
+globs: [patterns]
+alwaysApply: true/false
+---
+
+- First rule
+- Second rule
+@example-file.ts
+```
+
+## Best Practices
+- Keep under 500 lines
+- Split complex rules
+- Include examples
+- Be specific
+- Reuse common rules
+
+
+

@@ -655,7 +655,7 @@ button.standard {
 	color: #fbff4a;
 	text-shadow: 1px 1px 0 #000;
 
-	span {
+	& span {
 		font-family: 'RuneScapeBold', system-ui, -apple-system, sans-serif;
 	}
 }
@@ -666,7 +666,6 @@ button.standard {
 	position: relative;
 	z-index: 1;
 	margin: 0 -4px;
-
 
 	&::before {
 		content: '';
@@ -709,7 +708,6 @@ button.standard {
 		background-repeat: repeat-y;
 		background-size: 26px auto;
 	}
-
 }
 
 .toast {
@@ -834,7 +832,7 @@ button.standard {
 }
 
 .logout-tab {
-	p {
+	& p {
 		text-align: center;
 		color: #fe981f;
 	}
