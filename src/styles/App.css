@@ -232,6 +232,11 @@ button.standard {
 	overflow: hidden;
 }
 
+
+.rooms-panel {
+	box-shadow: inset -5px 0px 12px rgba(0, 0, 0, 0.5);
+}
+
 .chat-panel {
 	display: flex;
 	flex-direction: column;
@@ -288,6 +293,7 @@ button.standard {
 	display: flex;
 	flex-direction: column;
 	height: 100%;
+	box-shadow: inset 5px 0px 12px rgba(0, 0, 0, 0.5);
 
 	.user-list {
 		flex: 1;
