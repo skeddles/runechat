@@ -16,7 +16,6 @@ import '../styles/tabs.css';
 interface ChatProps {
 	username: string;
 	onShowToast: (message: string) => void;
-	showWelcomeToast: () => void;
 }
 
 interface Message {
@@ -59,7 +58,7 @@ function splitTextIntoChars(text: string): JSX.Element[] {
 	));
 }
 
-function Chat({ username, onShowToast, showWelcomeToast }: ChatProps) {
+function Chat({ username, onShowToast }: ChatProps) {
 	const [messages, setMessages] = useState<Message[]>([]);
 	const [rooms, setRooms] = useState<Room[]>([]);
 	const [users, setUsers] = useState<string[]>([]);
@@ -78,6 +77,25 @@ function Chat({ username, onShowToast, showWelcomeToast }: ChatProps) {
 	const [leftSelectedTab, setLeftSelectedTab] = useState('rooms');
 	const [rightSelectedTab, setRightSelectedTab] = useState('users');
 
+	// Function to get time difference message
+	const getLastLoginMessage = () => {
+		const lastLogin = localStorage.getItem('lastLogin');
+		if (!lastLogin) return 'Welcome back!';
+
+		const lastLoginDate = new Date(lastLogin);
+		const now = new Date();
+		const diffTime = Math.abs(now.getTime() - lastLoginDate.getTime());
+		const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+		if (diffDays === 0) {
+			return 'You last logged in <strong>earlier today</strong>';
+		} else if (diffDays === 1) {
+			return 'You last logged in <strong>yesterday</strong>';
+		} else {
+			return `You last logged in <strong>${diffDays} days ago</strong>`;
+		}
+	};
+
 	// Handle window resize
 	useEffect(() => {
 		const handleResize = () => {
@@ -89,7 +107,11 @@ function Chat({ username, onShowToast, showWelcomeToast }: ChatProps) {
 	}, []);
 
 	useEffect(() => {
-		showWelcomeToast();
+		// Store current login time
+		localStorage.setItem('lastLogin', new Date().toISOString());
+
+		// Show welcome toast with last login info
+		onShowToast(getLastLoginMessage());
 
 		// Initialize audio
 		audioRef.current = new Audio('/autumn-voyage.mp3');

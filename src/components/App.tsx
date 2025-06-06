@@ -91,7 +91,6 @@ function App() {
 								<Chat
 									username={username}
 									onShowToast={showToast}
-									showWelcomeToast={() => showToast('<strong>Welcome to RuneChat</strong><br/>You last logged in <strong>earlier today.</strong>')}
 								/>
 							) : (
 								<Navigate to="/" />
@@ -105,7 +104,6 @@ function App() {
 								<Chat
 									username={username}
 									onShowToast={showToast}
-									showWelcomeToast={() => showToast('<strong>Welcome to RuneChat</strong><br/>You last logged in <strong>earlier today.</strong>')}
 								/>
 							) : (
 								<Navigate to="/" />
