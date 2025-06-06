@@ -34,6 +34,12 @@ interface Room {
 	flagId: number;
 }
 
+interface Stats {
+	pageLoads: number;
+	messagesSent: number;
+	roomsCreated: number;
+}
+
 // Text effect types
 type TextEffect = 'wave' | 'scroll' | 'slide' | 'flash1' | 'flash2' | 'flash3' | 'glow1' | 'glow2' | 'glow3';
 
@@ -187,6 +193,41 @@ function Chat({ username, onShowToast }: ChatProps) {
 		messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
 	}, [messages]);
 
+	// Helper function to update stats
+	const updateStats = (key: keyof Stats) => {
+		const storedStats = localStorage.getItem('chatStats');
+		if (storedStats) {
+			const stats = JSON.parse(storedStats);
+			stats[key]++;
+			localStorage.setItem('chatStats', JSON.stringify(stats));
+			// Dispatch custom event for stats update
+			window.dispatchEvent(new CustomEvent('statsUpdated'));
+		}
+	};
+
+	// Initialize stats and track page load
+	useEffect(() => {
+		console.log('Stats effect running');
+		const storedStats = localStorage.getItem('chatStats');
+		const currentTime = Date.now();
+		const lastUpdate = localStorage.getItem('lastStatsUpdate');
+
+		// Only update if it's been more than 1 second since last update
+		if (!lastUpdate || (currentTime - parseInt(lastUpdate)) > 1000) {
+			if (!storedStats) {
+				localStorage.setItem('chatStats', JSON.stringify({
+					pageLoads: 1,
+					messagesSent: 0,
+					roomsCreated: 0
+				}));
+				window.dispatchEvent(new CustomEvent('statsUpdated'));
+			} else {
+				updateStats('pageLoads');
+			}
+			localStorage.setItem('lastStatsUpdate', currentTime.toString());
+		}
+	}, []);
+
 	const handleSendMessage = (e: React.FormEvent) => {
 		e.preventDefault();
 		if (newMessage.trim() && ws) {
@@ -194,6 +235,7 @@ function Chat({ username, onShowToast }: ChatProps) {
 				type: 'message',
 				content: newMessage.trim()
 			}));
+			updateStats('messagesSent');
 			setNewMessage('');
 		}
 	};
@@ -213,6 +255,7 @@ function Chat({ username, onShowToast }: ChatProps) {
 				type: 'createRoom',
 				roomId
 			}));
+			updateStats('roomsCreated');
 			setNewRoomName('');
 			handleJoinRoom(roomId);
 			onShowToast(`You created a new world called <strong>${roomId}</strong>`);

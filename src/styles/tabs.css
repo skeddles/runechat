@@ -48,3 +48,35 @@
 	overflow-y: auto;
 	min-height: 0;
 }
+
+.stats-list {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	padding: 0.5rem;
+}
+
+.stat-item {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 0.5rem;
+	background-color: rgba(0, 0, 0, 0.2);
+	border-radius: 4px;
+}
+
+.stat-label {
+	font-family: 'RuneScape', system-ui, -apple-system, sans-serif;
+	color: white;
+	-webkit-font-smoothing: none;
+	-moz-osx-font-smoothing: none;
+	text-shadow: 1px 1px 0 #000;
+}
+
+.stat-value {
+	font-family: 'RuneScapeBold', system-ui, -apple-system, sans-serif;
+	color: #fbff4a;
+	-webkit-font-smoothing: none;
+	-moz-osx-font-smoothing: none;
+	text-shadow: 1px 1px 0 #000;
+}

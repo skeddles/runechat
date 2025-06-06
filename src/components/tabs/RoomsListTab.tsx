@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import Tooltip from '../Tooltip';
 
 interface Room {
