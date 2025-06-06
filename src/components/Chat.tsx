@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Tooltip from './Tooltip';
+import { getWebSocketUrl } from '../config';
 
 interface ChatProps {
 	username: string;
@@ -68,7 +69,8 @@ function Chat({ username, onShowToast, showWelcomeToast }: ChatProps) {
 	}, []);
 
 	useEffect(() => {
-		const websocket = new WebSocket('ws://localhost:3001');
+		const wsUrl = import.meta.env.VITE_SERVER_URL || 'ws://localhost:3001';
+		const websocket = new WebSocket(wsUrl);
 
 		websocket.onopen = () => {
 			websocket.send(JSON.stringify({ type: 'setUsername', username }));
