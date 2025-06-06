@@ -5,13 +5,19 @@ alwaysApply: true
 ---
 - always use tabs for indent
 - whenever any font, image or audio asset is added, it must be added to the list of files on the loading screen
-- all CSS should be placed within App.css
+- all CSS should be placed within ./src/styles/App.css
 - CSS should be nested to mimic the hierarchy of HTML elements when possible
+- css psuedo elements or states should be nested if the parent css exists
 - When nesting an element selector (like div, p, span, button, etc.) that does not have a class name, you must put "& " before the element name.
+- Do not use the CSS properties transition, opacity, or border-radius
 - Add tooltips to interactive elements when appropriate
 
 
 [LoadingScreen.tsx](mdc:src/components/LoadingScreen.tsx) [Tooltip.tsx](mdc:src/components/Tooltip.tsx) [App.css](mdc:styles/App.css) [App.tsx](mdc:src/components/App.tsx)
+
+
+
+
 
 
 

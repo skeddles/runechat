@@ -63,12 +63,69 @@ h2 {
 }
 
 .app {
-	width: 100%;
-	min-height: 100vh;
 	display: flex;
 	flex-direction: column;
-}
+	height: 100vh;
+	background-color: #000;
+	position: relative;
+	overflow: hidden;
 
+	&[data-cursor="default"] {
+
+		&,
+		& * {
+			cursor: default !important;
+		}
+	}
+
+	&[data-cursor="gold"] {
+
+		&,
+		& * {
+			cursor: url('/cursors/gold.png'), auto !important;
+		}
+	}
+
+	&[data-cursor="silver"] {
+
+		&,
+		& * {
+			cursor: url('/cursors/silver.png'), auto !important;
+		}
+	}
+
+	&[data-cursor="trout"] {
+
+		&,
+		& * {
+			cursor: url('/cursors/trout.png'), auto !important;
+		}
+	}
+
+	&[data-cursor="dragon-dagger"] {
+
+		&,
+		& * {
+			cursor: url('/cursors/dragon-dagger.png'), auto !important;
+		}
+	}
+
+	&[data-cursor="dragon-dagger-p"] {
+
+		&,
+		& * {
+			cursor: url('/cursors/dragon-dagger-p.png'), auto !important;
+		}
+	}
+
+	&[data-cursor="dragon-scimitar"] {
+
+		&,
+		& * {
+			cursor: url('/cursors/dragon-scimitar.png'), auto !important;
+		}
+	}
+}
 
 .login-container {
 	display: flex;
@@ -930,10 +987,53 @@ button.standard {
 	border-color: #fe981f;
 }
 
+.avatar-option img {
+	width: 32px;
+	height: 32px;
+	object-fit: contain;
+	pointer-events: none;
+}
+
 .equipment-tab {
 	display: flex;
 	flex-direction: column;
 	height: 100%;
 	padding: 1.5rem 0.5rem 0.5rem 0.5rem;
 	overflow: hidden;
+}
+
+.cursor-selector {
+	display: flex;
+	justify-content: space-around;
+	flex-wrap: wrap;
+	gap: 8px;
+	overflow-y: auto;
+	padding-bottom: 8px;
+	flex: 1;
+	min-height: 0;
+}
+
+.cursor-option {
+	cursor: pointer;
+	border: 2px solid transparent;
+	width: 48px;
+	height: 48px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.cursor-option:hover {
+	border-color: #fbff4a;
+}
+
+.cursor-option.selected {
+	border-color: #fe981f;
+}
+
+.cursor-option img {
+	width: 32px;
+	height: 32px;
+	object-fit: contain;
+	pointer-events: none;
 }

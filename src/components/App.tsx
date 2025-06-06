@@ -4,15 +4,17 @@ import Login from './Login';
 import Chat from './Chat';
 import Toast from './Toast';
 import LoadingScreen from './LoadingScreen';
+import { CursorProvider, useCursor } from '../contexts/CursorContext';
 import '../styles/App.css';
 import '../styles/text-effects.css';
 
-function App() {
+function AppContent() {
 	const [username, setUsername] = useState<string | null>(null);
 	const [toast, setToast] = useState<{ message: string; key: number } | null>(null);
 	const [isLoading, setIsLoading] = useState(true);
 	const [isInitialized, setIsInitialized] = useState(false);
 	const audioRef = useRef<HTMLAudioElement | null>(null);
+	const { cursor } = useCursor();
 
 	useEffect(() => {
 		const savedUsername = localStorage.getItem('username');
@@ -99,7 +101,7 @@ function App() {
 
 	return (
 		<Router>
-			<div className="app">
+			<div className="app" data-cursor={cursor}>
 				{toast && (
 					<Toast
 						key={toast.key}
@@ -143,6 +145,14 @@ function App() {
 				</Routes>
 			</div>
 		</Router>
+	);
+}
+
+function App() {
+	return (
+		<CursorProvider>
+			<AppContent />
+		</CursorProvider>
 	);
 }
 

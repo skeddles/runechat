@@ -64,7 +64,14 @@ function LoadingScreen({ onLoadComplete }: LoadingScreenProps) {
 					{ src: '/icons/apple-touch-icon.png', name: 'Apple Touch Icon' },
 					{ src: '/icons/web-app-manifest-512x512.png', name: 'Web App Manifest Large' },
 					{ src: '/icons/web-app-manifest-192x192.png', name: 'Web App Manifest Small' },
-					{ src: '/icons/favicon-96x96.png', name: 'Favicon 96x96' }
+					{ src: '/icons/favicon-96x96.png', name: 'Favicon 96x96' },
+					{ src: '/cursors/default.png', name: 'Default Cursor' },
+					{ src: '/cursors/gold.png', name: 'Gold Cursor' },
+					{ src: '/cursors/silver.png', name: 'Silver Cursor' },
+					{ src: '/cursors/trout.png', name: 'Trout Cursor' },
+					{ src: '/cursors/dragon-dagger.png', name: 'Dragon Dagger Cursor' },
+					{ src: '/cursors/dragon-dagger-p.png', name: 'Poison Dragon Dagger Cursor' },
+					{ src: '/cursors/dragon-scimitar.png', name: 'Dragon Scimitar Cursor' }
 				];
 
 				for (let i = 0; i < images.length; i++) {
