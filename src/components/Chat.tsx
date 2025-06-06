@@ -16,6 +16,7 @@ import '../styles/tabs.css';
 interface ChatProps {
 	username: string;
 	onShowToast: (message: string) => void;
+	onLogout: () => void;
 }
 
 interface Message {
@@ -64,7 +65,7 @@ function splitTextIntoChars(text: string): JSX.Element[] {
 	));
 }
 
-function Chat({ username, onShowToast }: ChatProps) {
+function Chat({ username, onShowToast, onLogout }: ChatProps) {
 	const [messages, setMessages] = useState<Message[]>([]);
 	const [rooms, setRooms] = useState<Room[]>([]);
 	const [users, setUsers] = useState<string[]>([]);
@@ -355,7 +356,7 @@ function Chat({ username, onShowToast }: ChatProps) {
 			id: 'logout',
 			label: 'Logout',
 			icon: 'logout.png',
-			content: <LogoutTab />
+			content: <LogoutTab onLogout={onLogout} />
 		},
 		{
 			id: 'options',

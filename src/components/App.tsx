@@ -55,6 +55,19 @@ function App() {
 		setUsername(name);
 	};
 
+	const handleLogout = () => {
+		// Stop any playing audio
+		if (audioRef.current) {
+			audioRef.current.pause();
+			audioRef.current.currentTime = 0;
+		}
+		// Clear username from state
+		setUsername(null);
+		// Clear localStorage
+		localStorage.removeItem('username');
+		localStorage.removeItem('chatStats');
+	};
+
 	const showToast = (message: string) => {
 		setToast({ message, key: Date.now() });
 	};
@@ -91,6 +104,7 @@ function App() {
 								<Chat
 									username={username}
 									onShowToast={showToast}
+									onLogout={handleLogout}
 								/>
 							) : (
 								<Navigate to="/" />
@@ -104,6 +118,7 @@ function App() {
 								<Chat
 									username={username}
 									onShowToast={showToast}
+									onLogout={handleLogout}
 								/>
 							) : (
 								<Navigate to="/" />
