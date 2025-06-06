@@ -43,7 +43,28 @@ function LoadingScreen({ onLoadComplete }: LoadingScreenProps) {
 					{ src: '/report-button.png', name: 'Report Button' },
 					{ src: '/column-separator-ends.png', name: 'Column Separator Ends' },
 					{ src: '/column-separator-middle.png', name: 'Column Separator Middle' },
-					{ src: '/flags.png', name: 'Flags' }
+					{ src: '/flags.png', name: 'Flags' },
+					{ src: '/avatars.png', name: 'Avatars' },
+					{ src: '/logout-button.png', name: 'Logout Button' },
+					{ src: '/column-bar-texture.png', name: 'Column Bar Texture' },
+					{ src: '/rock-pattern.png', name: 'Rock Pattern' },
+					{ src: '/tab-buttons.png', name: 'Tab Buttons' },
+					{ src: '/sorting-arrows.png', name: 'Sorting Arrows' },
+					{ src: '/world-stars.png', name: 'World Stars' },
+					{ src: '/stats.png', name: 'Stats Icon' },
+					{ src: '/rooms-list.png', name: 'Rooms List Icon' },
+					{ src: '/options.png', name: 'Options Icon' },
+					{ src: '/music.png', name: 'Music Icon' },
+					{ src: '/logout.png', name: 'Logout Icon' },
+					{ src: '/equipment.png', name: 'Equipment Icon' },
+					{ src: '/user-list.png', name: 'User List Icon' },
+					{ src: '/new-room.png', name: 'New Room Icon' },
+					{ src: '/icons/logo.png', name: 'Logo' },
+					{ src: '/icons/favicon.svg', name: 'Favicon' },
+					{ src: '/icons/apple-touch-icon.png', name: 'Apple Touch Icon' },
+					{ src: '/icons/web-app-manifest-512x512.png', name: 'Web App Manifest Large' },
+					{ src: '/icons/web-app-manifest-192x192.png', name: 'Web App Manifest Small' },
+					{ src: '/icons/favicon-96x96.png', name: 'Favicon 96x96' }
 				];
 
 				for (let i = 0; i < images.length; i++) {
