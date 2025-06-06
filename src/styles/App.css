@@ -237,6 +237,7 @@ button.standard {
 	display: flex;
 	flex-direction: column;
 	height: 100%;
+	box-shadow: inset 4px 30px 12px rgba(0, 0, 0, 0.5);
 
 	.chat-header {
 		height: 24px;
