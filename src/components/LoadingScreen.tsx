@@ -120,6 +120,9 @@ function LoadingScreen({ onLoadComplete }: LoadingScreenProps) {
 					<span className="loading-text">{loadingStatus.text} - {loadingStatus.progress}%</span>
 				</div>
 			</div>
+			<div className="floating-text">
+				this is just a free fan project pls dont pk me jagex - <a href="https://github.com/skeddles/runechat/" target="_blank" rel="noopener noreferrer">github</a>
+			</div>
 		</div>
 	);
 }

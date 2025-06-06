@@ -31,6 +31,9 @@ function Login({ onLogin }: LoginProps) {
 				</div>
 				<button type="submit">Login</button>
 			</form>
+			<div className="floating-text">
+				this is just a free fan project pls dont pk me jagex - <a href="https://github.com/skeddles/runechat/" target="_blank" rel="noopener noreferrer">github</a>
+			</div>
 		</div>
 	);
 }

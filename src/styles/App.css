@@ -80,6 +80,7 @@ h2 {
 	background-position: center;
 	background-repeat: no-repeat;
 	width: 100%;
+	position: relative;
 
 	.login-form {
 		width: 360px;
@@ -170,6 +171,27 @@ h2 {
 			}
 		}
 	}
+}
+
+.floating-text {
+	position: absolute;
+	bottom: 20px;
+	left: 50%;
+	transform: translateX(-50%);
+	color: white;
+	font-family: 'RuneScapeSmall', system-ui, -apple-system, sans-serif;
+	text-align: center;
+	text-shadow: 1px 1px 0 #000;
+	z-index: 10;
+}
+
+.floating-text a {
+	color: #fbff4a;
+	text-decoration: none;
+}
+
+.floating-text a:hover {
+	text-decoration: underline;
 }
 
 button.standard {
