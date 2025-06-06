@@ -214,6 +214,12 @@ wss.on('connection', (ws) => {
 
 				const currentRoomData = chatRooms.get(currentRoom);
 				currentRoomData.messages.push(messageData);
+
+				// Keep only the latest 256 messages
+				if (currentRoomData.messages.length > 256) {
+					currentRoomData.messages = currentRoomData.messages.slice(-256);
+				}
+
 				currentRoomData.lastActivity = Date.now();
 
 				broadcastToRoom(currentRoom, messageData);
