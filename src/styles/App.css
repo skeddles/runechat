@@ -242,23 +242,36 @@ button.standard {
 	overflow: hidden;
 }
 
-.rooms-panel,
-.users-panel {
-	padding: 1rem;
-	overflow-y: auto;
-	background-image: url('/sidebar-bg-repeating.png');
-	background-repeat: repeat;
+@media (max-width: 949px) {
+	.chat-container {
+		grid-template-columns: 250px 18px 1fr;
+	}
 }
 
 .rooms-panel,
-.chat-panel,
 .users-panel {
 	display: flex;
 	flex-direction: column;
+	background: url('/panel-background.png') repeat;
+	border-radius: 4px;
 	height: 100%;
-	overflow: hidden;
+	min-height: 0;
+	position: relative;
 }
 
+.rooms-list-tab,
+.user-list-tab,
+.new-room-tab,
+.equipment-tab,
+.stats-tab,
+.logout-tab,
+.options-tab,
+.music-tab {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	padding: 1.5rem 0.5rem 0.5rem 0.5rem;
+}
 
 .rooms-panel {
 	box-shadow: inset -5px 0px 12px rgba(0, 0, 0, 0.5);

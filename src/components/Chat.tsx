@@ -1,6 +1,17 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Tooltip from './Tooltip';
+import TabBar from './TabBar';
+import type { Tab } from './TabBar';
+import RoomsListTab from './tabs/RoomsListTab';
+import NewRoomTab from './tabs/NewRoomTab';
+import EquipmentTab from './tabs/EquipmentTab';
+import StatsTab from './tabs/StatsTab';
+import UserListTab from './tabs/UserListTab';
+import LogoutTab from './tabs/LogoutTab';
+import OptionsTab from './tabs/OptionsTab';
+import MusicTab from './tabs/MusicTab';
+import '../styles/tabs.css';
 
 interface ChatProps {
 	username: string;
@@ -63,6 +74,19 @@ function Chat({ username, onShowToast, showWelcomeToast }: ChatProps) {
 	const messagesEndRef = useRef<HTMLDivElement>(null);
 	const { roomId } = useParams();
 	const navigate = useNavigate();
+	const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 950);
+	const [leftSelectedTab, setLeftSelectedTab] = useState('rooms');
+	const [rightSelectedTab, setRightSelectedTab] = useState('users');
+
+	// Handle window resize
+	useEffect(() => {
+		const handleResize = () => {
+			setIsSmallScreen(window.innerWidth < 950);
+		};
+
+		window.addEventListener('resize', handleResize);
+		return () => window.removeEventListener('resize', handleResize);
+	}, []);
 
 	useEffect(() => {
 		showWelcomeToast();
@@ -212,96 +236,87 @@ function Chat({ username, onShowToast, showWelcomeToast }: ChatProps) {
 		);
 	};
 
+	// Define left sidebar tabs
+	const leftTabs: Tab[] = [
+		{
+			id: 'rooms',
+			label: 'Rooms',
+			icon: 'rooms-list.png',
+			content: (
+				<RoomsListTab
+					rooms={sortedRooms}
+					selectedRoom={roomId || null}
+					onJoinRoom={handleJoinRoom}
+					onSort={handleSort}
+					sortConfig={sortConfig}
+					newRoomName={newRoomName}
+					onNewRoomNameChange={setNewRoomName}
+					onCreateRoom={handleCreateRoom}
+				/>
+			)
+		},
+		{
+			id: 'newRoom',
+			label: 'New Room',
+			icon: 'new-room.png',
+			content: <NewRoomTab />
+		},
+		{
+			id: 'equipment',
+			label: 'Equipment',
+			icon: 'equipment.png',
+			content: <EquipmentTab />
+		},
+		{
+			id: 'stats',
+			label: 'Stats',
+			icon: 'stats.png',
+			content: <StatsTab />
+		}
+	];
+
+	// Define right sidebar tabs
+	const rightTabs: Tab[] = [
+		{
+			id: 'users',
+			label: 'Users',
+			icon: 'user-list.png',
+			content: <UserListTab users={users} onShowToast={onShowToast} />
+		},
+		{
+			id: 'logout',
+			label: 'Logout',
+			icon: 'logout.png',
+			content: <LogoutTab />
+		},
+		{
+			id: 'options',
+			label: 'Options',
+			icon: 'options.png',
+			content: <OptionsTab />
+		},
+		{
+			id: 'music',
+			label: 'Music',
+			icon: 'music.png',
+			content: <MusicTab />
+		}
+	];
+
+	// When screen is small, combine all tabs into left sidebar
+	const allTabs = isSmallScreen ? [...leftTabs, ...rightTabs] : leftTabs;
+	const selectedTab = isSmallScreen ? leftSelectedTab : (leftSelectedTab === 'rooms' ? rightSelectedTab : leftSelectedTab);
+
 	return (
 		<div className="chat-container">
 			<div className="rooms-panel">
-				<Tooltip text="List of chatrooms">
-					<h2>Worlds</h2>
-				</Tooltip>
-				<div className="room-list">
-					<table className="room-table">
-						<thead>
-							<tr>
-								<th onClick={() => handleSort('starId')}>
-									<Tooltip text="Sort by star level">
-										<div style={{ width: '100%', height: '100%' }}>
-											<span className={`sort-icon ${sortConfig.key === 'starId' ? `active ${sortConfig.direction}` : ''}`} />
-										</div>
-									</Tooltip>
-								</th>
-								<th onClick={() => handleSort('worldId')}>
-									<Tooltip text="Sort by world number">
-										<div style={{ width: '100%', height: '100%' }}>
-											<span className={`sort-icon ${sortConfig.key === 'worldId' ? `active ${sortConfig.direction}` : ''}`} />
-										</div>
-									</Tooltip>
-								</th>
-								<th onClick={() => handleSort('flagId')}>
-									<Tooltip text="Sort by flag">
-										<div style={{ width: '100%', height: '100%' }}>
-											<span className={`sort-icon ${sortConfig.key === 'flagId' ? `active ${sortConfig.direction}` : ''}`} />
-										</div>
-									</Tooltip>
-								</th>
-								<th onClick={() => handleSort('userCount')}>
-									<Tooltip text="Sort by player count">
-										<div style={{ width: '100%', height: '100%' }}>
-											<span className={`sort-icon ${sortConfig.key === 'userCount' ? `active ${sortConfig.direction}` : ''}`} />
-										</div>
-									</Tooltip>
-								</th>
-								<th onClick={() => handleSort('id')}>
-									<Tooltip text="Sort by world name">
-										<div style={{ width: '100%', height: '100%' }}>
-											<span className={`sort-icon ${sortConfig.key === 'id' ? `active ${sortConfig.direction}` : ''}`} />
-										</div>
-									</Tooltip>
-								</th>
-							</tr>
-						</thead>
-						<tbody>
-							{sortedRooms.map(room => (
-								<tr
-									key={room.id}
-									className={`room-item ${room.id === roomId ? 'active' : ''}`}
-									onClick={() => handleJoinRoom(room.id)}
-								>
-									<td>
-										<span className="room-star" data-star={room.starId} />
-									</td>
-									<td>
-										<span className="room-world-id" data-star={room.starId}>
-											{room.worldId}
-										</span>
-									</td>
-									<td>
-										<span className="room-flag" data-flag={room.flagId} />
-									</td>
-									<td>
-										<span className="room-user-count">{room.userCount}</span>
-									</td>
-									<td>
-										<span className="room-name">{room.id}</span>
-									</td>
-								</tr>
-							))}
-						</tbody>
-					</table>
-				</div>
-				<form onSubmit={handleCreateRoom} className="create-room-form">
-					<label>
-						Name:
-						<input
-							type="text"
-							value={newRoomName}
-							onChange={(e) => setNewRoomName(e.target.value)}
-							placeholder="New room name"
-						/>
-					</label>
-					<Tooltip text="Create a new world">
-						<button type="submit" className="standard">Create</button>
-					</Tooltip>
-				</form>
+				<TabBar
+					tabs={leftTabs}
+					selectedTab={leftSelectedTab}
+					onTabSelect={setLeftSelectedTab}
+					position="top"
+				/>
+				{leftTabs.find(tab => tab.id === leftSelectedTab)?.content}
 			</div>
 
 			<div className="column-separator">
@@ -337,23 +352,32 @@ function Chat({ username, onShowToast, showWelcomeToast }: ChatProps) {
 				</form>
 			</div>
 
-			<div className="column-separator">
-				<div className="middle" />
-			</div>
+			{!isSmallScreen && (
+				<>
+					<div className="column-separator">
+						<div className="middle" />
+					</div>
 
-			<div className="users-panel">
-				<Tooltip text="List of users in this chatroom">
-					<h2>Players</h2>
-				</Tooltip>
-				<div className="user-list">
-					{users.map(user => (
-						<div key={user} className="user-item">
-							{user}
-						</div>
-					))}
-				</div>
-				<button className="report-button" onClick={() => onShowToast('get over it')}>Report Abuse</button>
-			</div>
+					<div className="users-panel">
+						<TabBar
+							tabs={rightTabs}
+							selectedTab={rightSelectedTab}
+							onTabSelect={setRightSelectedTab}
+							position="top"
+						/>
+						{rightTabs.find(tab => tab.id === rightSelectedTab)?.content}
+					</div>
+				</>
+			)}
+
+			{isSmallScreen && (
+				<TabBar
+					tabs={rightTabs}
+					selectedTab={rightSelectedTab}
+					onTabSelect={setRightSelectedTab}
+					position="bottom"
+				/>
+			)}
 		</div>
 	);
 }

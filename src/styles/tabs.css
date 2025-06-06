@@ -1,0 +1,50 @@
+.rooms-list-tab,
+.user-list-tab,
+.new-room-tab,
+.equipment-tab,
+.stats-tab,
+.logout-tab,
+.options-tab,
+.music-tab {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+}
+
+.rooms-list-tab h2,
+.user-list-tab h2,
+.new-room-tab h2,
+.equipment-tab h2,
+.stats-tab h2,
+.logout-tab h2,
+.options-tab h2,
+.music-tab h2 {
+	font-family: 'RuneScapeBold', system-ui, -apple-system, sans-serif;
+	color: white;
+	text-shadow: 1px 1px 0 #000;
+	-webkit-font-smoothing: none;
+	-moz-osx-font-smoothing: none;
+	margin-bottom: 1rem;
+}
+
+.rooms-list-tab p,
+.user-list-tab p,
+.new-room-tab p,
+.equipment-tab p,
+.stats-tab p,
+.logout-tab p,
+.options-tab p,
+.music-tab p {
+	font-family: 'RuneScape', system-ui, -apple-system, sans-serif;
+	color: white;
+	-webkit-font-smoothing: none;
+	-moz-osx-font-smoothing: none;
+	text-shadow: 1px 1px 0 #000;
+}
+
+.room-list,
+.user-list {
+	flex: 1;
+	overflow-y: auto;
+	min-height: 0;
+}

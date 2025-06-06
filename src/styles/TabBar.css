@@ -1,0 +1,86 @@
+.tab-bar {
+	display: flex;
+	gap: 0;
+	width: calc(100% + 2rem);
+	justify-content: center;
+	background: url('/rock-pattern.png') repeat;
+	margin: 0 -1rem;
+	padding: 0.5rem 1rem 0 1rem;
+	position: relative;
+}
+
+.tab-bar::after {
+	content: '';
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	height: 4px;
+	background: url('/column-bar-texture.png') repeat-x;
+	box-shadow: 0 -1px 0 #000, 0 1px 0 #000;
+}
+
+.tab-bar.top {
+	margin-bottom: 0;
+}
+
+.tab-bar.bottom {
+	margin-top: 0;
+}
+
+.tab-button {
+	width: 33px;
+	height: 36px;
+	padding: 0;
+	border: none;
+	background: url('/tab-buttons.png') no-repeat;
+	background-position: 0 0;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+	z-index: 1;
+	margin-bottom: -8px;
+}
+
+.tab-button img {
+	width: 33px;
+	height: 36px;
+}
+
+/* Top tab styles */
+.tab-button.first-top {
+	width: 38px;
+	background-position: -33px 0;
+}
+
+.tab-button.last-top {
+	width: 38px;
+	background-position: -71px 0;
+}
+
+/* Bottom tab styles */
+.tab-button.first-bottom {
+	width: 38px;
+	background-position: -109px 0;
+}
+
+.tab-button.last-bottom {
+	width: 38px;
+	background-position: -147px 0;
+}
+
+/* Hover states */
+.tab-button:hover {
+	background-position-y: -36px;
+}
+
+/* Selected states */
+.tab-button.selected {
+	background-position-y: -72px;
+}
+
+.tab-button.selected:hover {
+	background-position-y: -72px;
+}
