@@ -13,6 +13,7 @@ import OptionsTab from './tabs/OptionsTab';
 import MusicTab from './tabs/MusicTab';
 import Avatar from './Avatar';
 import '../styles/tabs.css';
+import { validateMessage } from '../utils/validation';
 
 interface ChatProps {
 	username: string;
@@ -90,6 +91,7 @@ function Chat({ username, onShowToast, onLogout }: ChatProps) {
 		const saved = localStorage.getItem('avatarId');
 		return saved !== null ? parseInt(saved) : 0; // Default to 0 if not set
 	});
+	const [messageError, setMessageError] = useState<string | null>(null);
 
 	// Function to get time difference message
 	const getLastLoginMessage = () => {
@@ -261,13 +263,19 @@ function Chat({ username, onShowToast, onLogout }: ChatProps) {
 	const handleSendMessage = (e: React.FormEvent) => {
 		e.preventDefault();
 		if (newMessage.trim() && ws) {
-			ws.send(JSON.stringify({
-				type: 'message',
-				content: newMessage.trim(),
-				avatarId: currentAvatarId
-			}));
-			updateStats('messagesSent');
-			setNewMessage('');
+			const validation = validateMessage(newMessage.trim());
+			if (validation.isValid) {
+				ws.send(JSON.stringify({
+					type: 'message',
+					content: newMessage.trim(),
+					avatarId: currentAvatarId
+				}));
+				updateStats('messagesSent');
+				setNewMessage('');
+				setMessageError(null);
+			} else {
+				setMessageError(validation.error || 'Invalid message');
+			}
 		}
 	};
 
@@ -464,9 +472,14 @@ function Chat({ username, onShowToast, onLogout }: ChatProps) {
 					<input
 						type="text"
 						value={newMessage}
-						onChange={(e) => setNewMessage(e.target.value)}
+						onChange={(e) => {
+							setNewMessage(e.target.value);
+							setMessageError(null);
+						}}
 						placeholder="*"
+						maxLength={80}
 					/>
+					{messageError && <div className="error-message">{messageError}</div>}
 					<Tooltip text={`Send this message to ${roomId || 'public'}`}>
 						<button type="submit" className="standard">Send</button>
 					</Tooltip>

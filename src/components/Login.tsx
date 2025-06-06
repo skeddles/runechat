@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { validateUsername } from '../utils/validation';
 
 interface LoginProps {
 	onLogin: (username: string) => void;
@@ -6,11 +7,19 @@ interface LoginProps {
 
 function Login({ onLogin }: LoginProps) {
 	const [username, setUsername] = useState('');
+	const [error, setError] = useState<string | null>(null);
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
-		if (username.trim()) {
-			onLogin(username.trim());
+		const trimmedUsername = username.trim();
+
+		if (trimmedUsername) {
+			const validation = validateUsername(trimmedUsername);
+			if (validation.isValid) {
+				onLogin(trimmedUsername);
+			} else {
+				setError(validation.error || 'Invalid username');
+			}
 		}
 	};
 
@@ -24,10 +33,15 @@ function Login({ onLogin }: LoginProps) {
 						type="text"
 						id="username"
 						value={username}
-						onChange={(e) => setUsername(e.target.value)}
+						onChange={(e) => {
+							setUsername(e.target.value);
+							setError(null);
+						}}
 						placeholder="*"
 						required
+						maxLength={32}
 					/>
+					{error && <div className="error-message">{error}</div>}
 				</div>
 				<button type="submit">Login</button>
 			</form>

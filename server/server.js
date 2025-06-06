@@ -2,6 +2,39 @@ import { WebSocketServer, WebSocket } from 'ws';
 import { createServer } from 'http';
 import cors from 'cors';
 
+// Validation functions
+const isAsciiOnly = (str) => /^[\x00-\x7F]*$/.test(str);
+
+const validateMessage = (content) => {
+	if (!isAsciiOnly(content)) {
+		return { isValid: false, error: 'Message can only contain ASCII characters' };
+	}
+	if (content.length > 80) {
+		return { isValid: false, error: 'Message cannot exceed 80 characters' };
+	}
+	return { isValid: true };
+};
+
+const validateUsername = (username) => {
+	if (!isAsciiOnly(username)) {
+		return { isValid: false, error: 'Username can only contain ASCII characters' };
+	}
+	if (username.length > 32) {
+		return { isValid: false, error: 'Username cannot exceed 32 characters' };
+	}
+	return { isValid: true };
+};
+
+const validateServerName = (name) => {
+	if (!isAsciiOnly(name)) {
+		return { isValid: false, error: 'Server name can only contain ASCII characters' };
+	}
+	if (name.length > 32) {
+		return { isValid: false, error: 'Server name cannot exceed 32 characters' };
+	}
+	return { isValid: true };
+};
+
 const server = createServer();
 const wss = new WebSocketServer({ server });
 
@@ -107,6 +140,11 @@ wss.on('connection', (ws) => {
 
 		switch (data.type) {
 			case 'setUsername':
+				const usernameValidation = validateUsername(data.username);
+				if (!usernameValidation.isValid) {
+					ws.send(JSON.stringify({ type: 'error', message: usernameValidation.error }));
+					return;
+				}
 				currentUser = data.username;
 				currentAvatarId = data.avatarId || Math.floor(Math.random() * 66);
 				ws.send(JSON.stringify({
@@ -178,6 +216,12 @@ wss.on('connection', (ws) => {
 					return;
 				}
 
+				const serverNameValidation = validateServerName(data.roomId);
+				if (!serverNameValidation.isValid) {
+					ws.send(JSON.stringify({ type: 'error', message: serverNameValidation.error }));
+					return;
+				}
+
 				const newRoomId = data.roomId;
 				if (chatRooms.has(newRoomId)) {
 					ws.send(JSON.stringify({ type: 'error', message: 'Room already exists' }));
@@ -201,6 +245,12 @@ wss.on('connection', (ws) => {
 			case 'message':
 				if (!currentRoom || !currentUser) {
 					ws.send(JSON.stringify({ type: 'error', message: 'Not in a room' }));
+					return;
+				}
+
+				const messageValidation = validateMessage(data.content);
+				if (!messageValidation.isValid) {
+					ws.send(JSON.stringify({ type: 'error', message: messageValidation.error }));
 					return;
 				}
 
