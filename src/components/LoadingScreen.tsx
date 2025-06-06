@@ -35,7 +35,7 @@ function LoadingScreen({ onLoadComplete }: LoadingScreenProps) {
 					{ src: '/login-box.png', name: 'Login Box' },
 					{ src: '/login-button.png', name: 'Login Button' },
 					{ src: '/button.png', name: 'Button' },
-					{ src: '/sidebar-bg-repeating.png', name: 'Sidebar Background' },
+					{ src: '/panel-background.png', name: 'Sidebar Background' },
 					{ src: '/background.png', name: 'Chat Background' },
 					{ src: '/chatbox-frame.png', name: 'Chatbox Frame' },
 					{ src: '/chatbox-bg.png', name: 'Chatbox Background' },
