@@ -490,15 +490,6 @@ function Chat({ username, onShowToast, onLogout }: ChatProps) {
 					</div>
 				</>
 			)}
-
-			{isSmallScreen && (
-				<TabBar
-					tabs={rightTabs}
-					selectedTab={rightSelectedTab}
-					onTabSelect={setRightSelectedTab}
-					position="bottom"
-				/>
-			)}
 		</div>
 	);
 }
