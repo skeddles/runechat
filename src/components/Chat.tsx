@@ -11,6 +11,7 @@ import UserListTab from './tabs/UserListTab';
 import LogoutTab from './tabs/LogoutTab';
 import OptionsTab from './tabs/OptionsTab';
 import MusicTab from './tabs/MusicTab';
+import Avatar from './Avatar';
 import '../styles/tabs.css';
 
 interface ChatProps {
@@ -24,6 +25,7 @@ interface Message {
 	user: string;
 	content: string;
 	timestamp: number;
+	avatarId?: number;
 }
 
 interface Room {
@@ -84,6 +86,10 @@ function Chat({ username, onShowToast, onLogout }: ChatProps) {
 	const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 950);
 	const [leftSelectedTab, setLeftSelectedTab] = useState('rooms');
 	const [rightSelectedTab, setRightSelectedTab] = useState('users');
+	const [currentAvatarId, setCurrentAvatarId] = useState<number>(() => {
+		const saved = localStorage.getItem('avatarId');
+		return saved !== null ? parseInt(saved) : 0; // Default to 0 if not set
+	});
 
 	// Function to get time difference message
 	const getLastLoginMessage = () => {
@@ -150,12 +156,28 @@ function Chat({ username, onShowToast, onLogout }: ChatProps) {
 		};
 	}, []);
 
+	// Add avatar update listener
+	useEffect(() => {
+		const handleAvatarUpdate = (event: CustomEvent<number>) => {
+			setCurrentAvatarId(event.detail);
+		};
+
+		window.addEventListener('avatarUpdated', handleAvatarUpdate as EventListener);
+		return () => {
+			window.removeEventListener('avatarUpdated', handleAvatarUpdate as EventListener);
+		};
+	}, []);
+
 	useEffect(() => {
 		const wsUrl = import.meta.env.VITE_SERVER_URL || 'ws://localhost:3001';
 		const websocket = new WebSocket(wsUrl);
 
 		websocket.onopen = () => {
-			websocket.send(JSON.stringify({ type: 'setUsername', username }));
+			websocket.send(JSON.stringify({
+				type: 'setUsername',
+				username,
+				avatarId: currentAvatarId
+			}));
 			if (roomId) {
 				websocket.send(JSON.stringify({ type: 'joinRoom', roomId }));
 			} else {
@@ -195,7 +217,7 @@ function Chat({ username, onShowToast, onLogout }: ChatProps) {
 		return () => {
 			websocket.close();
 		};
-	}, [username, roomId]);
+	}, [username, roomId, currentAvatarId]);
 
 	useEffect(() => {
 		messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -241,7 +263,8 @@ function Chat({ username, onShowToast, onLogout }: ChatProps) {
 		if (newMessage.trim() && ws) {
 			ws.send(JSON.stringify({
 				type: 'message',
-				content: newMessage.trim()
+				content: newMessage.trim(),
+				avatarId: currentAvatarId
 			}));
 			updateStats('messagesSent');
 			setNewMessage('');
@@ -421,10 +444,17 @@ function Chat({ username, onShowToast, onLogout }: ChatProps) {
 				<div className="messages">
 					{messages.map((message, index) => (
 						<div key={index} className="message">
-							<span className="message-user">{message.user}:</span>
-							<span className="message-content">
-								{renderMessageContent(message.content)}
-							</span>
+							<Avatar
+								avatarId={message.avatarId ?? 0}
+								size={48}
+								className="message-avatar"
+							/>
+							<div className="message-content-wrapper">
+								<span className="message-user">{message.user}:</span>
+								<span className="message-content">
+									{renderMessageContent(message.content)}
+								</span>
+							</div>
 						</div>
 					))}
 					<div ref={messagesEndRef} />

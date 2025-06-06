@@ -11,12 +11,19 @@ function App() {
 	const [username, setUsername] = useState<string | null>(null);
 	const [toast, setToast] = useState<{ message: string; key: number } | null>(null);
 	const [isLoading, setIsLoading] = useState(true);
+	const [isInitialized, setIsInitialized] = useState(false);
 	const audioRef = useRef<HTMLAudioElement | null>(null);
 
 	useEffect(() => {
 		const savedUsername = localStorage.getItem('username');
 		if (savedUsername) {
 			setUsername(savedUsername);
+			// Initialize avatar if not set
+			if (!localStorage.getItem('avatarId')) {
+				const randomId = Math.floor(Math.random() * 66);
+				localStorage.setItem('avatarId', randomId.toString());
+			}
+			setIsInitialized(true);
 		}
 	}, []);
 
@@ -52,7 +59,11 @@ function App() {
 			audioRef.current.currentTime = 0;
 		}
 		localStorage.setItem('username', name);
+		// Initialize avatar
+		const randomId = Math.floor(Math.random() * 66);
+		localStorage.setItem('avatarId', randomId.toString());
 		setUsername(name);
+		setIsInitialized(true);
 	};
 
 	const handleLogout = () => {
@@ -63,9 +74,13 @@ function App() {
 		}
 		// Clear username from state
 		setUsername(null);
+		setIsInitialized(false);
 		// Clear localStorage
 		localStorage.removeItem('username');
 		localStorage.removeItem('chatStats');
+		localStorage.removeItem('lastLogin');
+		localStorage.removeItem('avatarId');
+		localStorage.removeItem('lastStatsUpdate');
 	};
 
 	const showToast = (message: string) => {
@@ -100,7 +115,7 @@ function App() {
 					<Route
 						path="/chat"
 						element={
-							username ? (
+							username && isInitialized ? (
 								<Chat
 									username={username}
 									onShowToast={showToast}
@@ -114,7 +129,7 @@ function App() {
 					<Route
 						path="/chat/:roomId"
 						element={
-							username ? (
+							username && isInitialized ? (
 								<Chat
 									username={username}
 									onShowToast={showToast}

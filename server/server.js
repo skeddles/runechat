@@ -81,6 +81,7 @@ function broadcastRoomList() {
 wss.on('connection', (ws) => {
 	let currentUser = null;
 	let currentRoom = null;
+	let currentAvatarId = 0;
 
 	// Set up user timeout
 	let userTimeout = null;
@@ -107,7 +108,12 @@ wss.on('connection', (ws) => {
 		switch (data.type) {
 			case 'setUsername':
 				currentUser = data.username;
-				ws.send(JSON.stringify({ type: 'usernameSet', username: currentUser }));
+				currentAvatarId = data.avatarId || Math.floor(Math.random() * 66);
+				ws.send(JSON.stringify({
+					type: 'usernameSet',
+					username: currentUser,
+					avatarId: currentAvatarId
+				}));
 				break;
 
 			case 'joinRoom':
@@ -146,7 +152,7 @@ wss.on('connection', (ws) => {
 
 				const room = chatRooms.get(currentRoom);
 				room.clients.add(ws);
-				room.users.set(currentUser, Date.now());
+				room.users.set(currentUser, { lastSeen: Date.now(), avatarId: currentAvatarId });
 				room.lastActivity = Date.now();
 
 				// Send room history
@@ -202,7 +208,8 @@ wss.on('connection', (ws) => {
 					type: 'message',
 					user: currentUser,
 					content: data.content,
-					timestamp: Date.now()
+					timestamp: Date.now(),
+					avatarId: currentAvatarId
 				};
 
 				const currentRoomData = chatRooms.get(currentRoom);
