@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Tooltip from './Tooltip';
-import { getWebSocketUrl } from '../config';
 
 interface ChatProps {
 	username: string;
