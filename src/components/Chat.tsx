@@ -352,7 +352,7 @@ function Chat({ username, onShowToast, showWelcomeToast }: ChatProps) {
 						</div>
 					))}
 				</div>
-				<button className="report-button">Report Abuse</button>
+				<button className="report-button" onClick={() => onShowToast('get over it')}>Report Abuse</button>
 			</div>
 		</div>
 	);
