@@ -29,7 +29,7 @@ function LoadingScreen({ onLoadComplete }: LoadingScreenProps) {
 				await document.fonts.load('1em RuneScapeSmall');
 				await new Promise(resolve => setTimeout(resolve, getRandomDelay(200, 400)));
 
-				// Load images with individual steps
+				// Load images
 				const images = [
 					{ src: '/login-background.png', name: 'Login Background' },
 					{ src: '/login-box.png', name: 'Login Box' },
@@ -60,6 +60,16 @@ function LoadingScreen({ onLoadComplete }: LoadingScreenProps) {
 
 					await new Promise(resolve => setTimeout(resolve, getRandomDelay(100, 300)));
 				}
+
+				// Load audio
+				setLoadingStatus({ text: 'Loading Music', progress: 70 });
+				await new Promise((resolve, reject) => {
+					const audio = new Audio('/scape-main.mp3');
+					audio.oncanplaythrough = resolve;
+					audio.onerror = reject;
+					audio.load();
+				});
+				await new Promise(resolve => setTimeout(resolve, getRandomDelay(100, 300)));
 
 				// Connect to server
 				setLoadingStatus({ text: 'Connecting to Server', progress: 75 });

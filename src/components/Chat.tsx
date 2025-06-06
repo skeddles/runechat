@@ -55,6 +55,7 @@ function Chat({ username, onShowToast, showWelcomeToast }: ChatProps) {
 	const [newMessage, setNewMessage] = useState('');
 	const [newRoomName, setNewRoomName] = useState('');
 	const [ws, setWs] = useState<WebSocket | null>(null);
+	const audioRef = useRef<HTMLAudioElement | null>(null);
 	const [sortConfig, setSortConfig] = useState<{ key: keyof Room; direction: 'asc' | 'desc' }>({
 		key: 'worldId',
 		direction: 'asc'
@@ -65,6 +66,28 @@ function Chat({ username, onShowToast, showWelcomeToast }: ChatProps) {
 
 	useEffect(() => {
 		showWelcomeToast();
+
+		// Initialize audio
+		audioRef.current = new Audio('/autumn-voyage.mp3');
+		audioRef.current.volume = 0.5;
+		audioRef.current.loop = true;
+
+		// Add event listeners for debugging
+		audioRef.current.addEventListener('play', () => console.log('Autumn Voyage started playing'));
+		audioRef.current.addEventListener('ended', () => console.log('Autumn Voyage finished playing'));
+		audioRef.current.addEventListener('error', (e) => console.error('Error with Autumn Voyage:', e));
+
+		// Try to play
+		console.log('Attempting to play Autumn Voyage...');
+		audioRef.current.play().catch(err => console.error('Play failed:', err));
+
+		// Cleanup function
+		return () => {
+			if (audioRef.current) {
+				audioRef.current.pause();
+				audioRef.current.currentTime = 0;
+			}
+		};
 	}, []);
 
 	useEffect(() => {
