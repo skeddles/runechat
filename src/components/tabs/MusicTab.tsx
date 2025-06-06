@@ -1,8 +1,17 @@
-function MusicTab() {
+interface MusicTabProps {
+	onStopMusic: () => void;
+	onPlayMusic: () => void;
+	isPlaying: boolean;
+}
+
+function MusicTab({ onStopMusic, onPlayMusic, isPlaying }: MusicTabProps) {
 	return (
 		<div className="music-tab">
 			<h2>Music</h2>
-			<p>Music controls will be here.</p>
+
+			<button className="stop-music-button" onClick={isPlaying ? onStopMusic : onPlayMusic}>
+				{isPlaying ? 'Stop Music' : 'Play Music'}
+			</button>
 		</div>
 	);
 }

@@ -73,6 +73,7 @@ function Chat({ username, onShowToast, onLogout }: ChatProps) {
 	const [newRoomName, setNewRoomName] = useState('');
 	const [ws, setWs] = useState<WebSocket | null>(null);
 	const audioRef = useRef<HTMLAudioElement | null>(null);
+	const [isMusicPlaying, setIsMusicPlaying] = useState(true);
 	const [sortConfig, setSortConfig] = useState<{ key: keyof Room; direction: 'asc' | 'desc' }>({
 		key: 'worldId',
 		direction: 'asc'
@@ -126,8 +127,14 @@ function Chat({ username, onShowToast, onLogout }: ChatProps) {
 		audioRef.current.loop = true;
 
 		// Add event listeners for debugging
-		audioRef.current.addEventListener('play', () => console.log('Autumn Voyage started playing'));
-		audioRef.current.addEventListener('ended', () => console.log('Autumn Voyage finished playing'));
+		audioRef.current.addEventListener('play', () => {
+			console.log('Autumn Voyage started playing');
+			setIsMusicPlaying(true);
+		});
+		audioRef.current.addEventListener('ended', () => {
+			console.log('Autumn Voyage finished playing');
+			setIsMusicPlaying(false);
+		});
 		audioRef.current.addEventListener('error', (e) => console.error('Error with Autumn Voyage:', e));
 
 		// Try to play
@@ -368,7 +375,22 @@ function Chat({ username, onShowToast, onLogout }: ChatProps) {
 			id: 'music',
 			label: 'Music',
 			icon: 'music.png',
-			content: <MusicTab />
+			content: <MusicTab
+				onStopMusic={() => {
+					if (audioRef.current) {
+						audioRef.current.pause();
+						audioRef.current.currentTime = 0;
+						setIsMusicPlaying(false);
+					}
+				}}
+				onPlayMusic={() => {
+					if (audioRef.current) {
+						audioRef.current.play().catch(err => console.error('Play failed:', err));
+						setIsMusicPlaying(true);
+					}
+				}}
+				isPlaying={isMusicPlaying}
+			/>
 		}
 	];
 
