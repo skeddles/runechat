@@ -16,9 +16,6 @@ interface RoomsListTabProps {
 	onJoinRoom: (roomId: string) => void;
 	onSort: (key: keyof Room) => void;
 	sortConfig: { key: keyof Room; direction: 'asc' | 'desc' };
-	newRoomName: string;
-	onNewRoomNameChange: (name: string) => void;
-	onCreateRoom: (e: React.FormEvent) => void;
 }
 
 function RoomsListTab({
@@ -26,10 +23,7 @@ function RoomsListTab({
 	selectedRoom,
 	onJoinRoom,
 	onSort,
-	sortConfig,
-	newRoomName,
-	onNewRoomNameChange,
-	onCreateRoom
+	sortConfig
 }: RoomsListTabProps) {
 	return (
 		<div className="rooms-list-tab">
@@ -106,20 +100,6 @@ function RoomsListTab({
 					</tbody>
 				</table>
 			</div>
-			<form onSubmit={onCreateRoom} className="create-room-form">
-				<label>
-					Name:
-					<input
-						type="text"
-						value={newRoomName}
-						onChange={(e) => onNewRoomNameChange(e.target.value)}
-						placeholder="New room name"
-					/>
-				</label>
-				<Tooltip text="Create a new world">
-					<button type="submit" className="standard">Create</button>
-				</Tooltip>
-			</form>
 		</div>
 	);
 }

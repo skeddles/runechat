@@ -249,17 +249,20 @@ function Chat({ username, onShowToast, showWelcomeToast }: ChatProps) {
 					onJoinRoom={handleJoinRoom}
 					onSort={handleSort}
 					sortConfig={sortConfig}
-					newRoomName={newRoomName}
-					onNewRoomNameChange={setNewRoomName}
-					onCreateRoom={handleCreateRoom}
 				/>
 			)
 		},
 		{
 			id: 'newRoom',
-			label: 'New Room',
+			label: 'New World',
 			icon: 'new-room.png',
-			content: <NewRoomTab />
+			content: (
+				<NewRoomTab
+					newRoomName={newRoomName}
+					onNewRoomNameChange={setNewRoomName}
+					onCreateRoom={handleCreateRoom}
+				/>
+			)
 		},
 		{
 			id: 'equipment',

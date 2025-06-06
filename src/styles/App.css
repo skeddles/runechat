@@ -597,7 +597,6 @@ button.standard {
 	flex-direction: column;
 	gap: 0.5rem;
 	flex-shrink: 0;
-	margin-top: auto;
 
 	& input {
 		padding: 0.25rem;
