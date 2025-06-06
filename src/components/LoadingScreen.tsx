@@ -6,6 +6,7 @@ interface LoadingScreenProps {
 
 function LoadingScreen({ onLoadComplete }: LoadingScreenProps) {
 	const [loadingStatus, setLoadingStatus] = useState({ text: 'Loading Fonts', progress: 0 });
+	const [maxProgress, setMaxProgress] = useState(0);
 	const [error, setError] = useState<string | null>(null);
 
 	// Helper function to get random delay between min and max
@@ -13,94 +14,116 @@ function LoadingScreen({ onLoadComplete }: LoadingScreenProps) {
 		return Math.floor(Math.random() * (max - min + 1)) + min;
 	};
 
+	// Helper function to update loading status with progress protection
+	const updateLoadingStatus = (text: string, progress: number) => {
+		const newProgress = Math.max(progress, maxProgress);
+		setMaxProgress(newProgress);
+		setLoadingStatus({ text, progress: newProgress });
+	};
+
 	useEffect(() => {
 		const loadAssets = async () => {
 			try {
-				// Load fonts with individual steps
-				setLoadingStatus({ text: 'Loading RuneScape Font', progress: 5 });
-				await document.fonts.load('1em RuneScape');
-				await new Promise(resolve => setTimeout(resolve, getRandomDelay(200, 400)));
-
-				setLoadingStatus({ text: 'Loading RuneScape Bold Font', progress: 15 });
-				await document.fonts.load('1em RuneScapeBold');
-				await new Promise(resolve => setTimeout(resolve, getRandomDelay(200, 400)));
-
-				setLoadingStatus({ text: 'Loading RuneScape Small Font', progress: 25 });
-				await document.fonts.load('1em RuneScapeSmall');
-				await new Promise(resolve => setTimeout(resolve, getRandomDelay(200, 400)));
-
-				// Load images
+				// Define all assets to load
 				const images = [
-					{ src: '/login-background.png', name: 'Login Background' },
-					{ src: '/login-box.png', name: 'Login Box' },
-					{ src: '/login-button.png', name: 'Login Button' },
-					{ src: '/button.png', name: 'Button' },
-					{ src: '/panel-background.png', name: 'Sidebar Background' },
-					{ src: '/background.png', name: 'Chat Background' },
-					{ src: '/chatbox-frame.png', name: 'Chatbox Frame' },
-					{ src: '/chatbox-bg.png', name: 'Chatbox Background' },
-					{ src: '/scroll-bg.png', name: 'Scroll Background' },
-					{ src: '/report-button.png', name: 'Report Button' },
-					{ src: '/column-separator-ends.png', name: 'Column Separator Ends' },
-					{ src: '/column-separator-middle.png', name: 'Column Separator Middle' },
-					{ src: '/flags.png', name: 'Flags' },
-					{ src: '/avatars.png', name: 'Avatars' },
-					{ src: '/logout-button.png', name: 'Logout Button' },
-					{ src: '/column-bar-texture.png', name: 'Column Bar Texture' },
-					{ src: '/rock-pattern.png', name: 'Rock Pattern' },
-					{ src: '/tab-buttons.png', name: 'Tab Buttons' },
-					{ src: '/sorting-arrows.png', name: 'Sorting Arrows' },
-					{ src: '/world-stars.png', name: 'World Stars' },
-					{ src: '/stats.png', name: 'Stats Icon' },
-					{ src: '/rooms-list.png', name: 'Rooms List Icon' },
-					{ src: '/options.png', name: 'Options Icon' },
-					{ src: '/music.png', name: 'Music Icon' },
-					{ src: '/logout.png', name: 'Logout Icon' },
-					{ src: '/equipment.png', name: 'Equipment Icon' },
-					{ src: '/user-list.png', name: 'User List Icon' },
-					{ src: '/new-room.png', name: 'New Room Icon' },
-					{ src: '/icons/logo.png', name: 'Logo' },
-					{ src: '/icons/favicon.svg', name: 'Favicon' },
-					{ src: '/icons/apple-touch-icon.png', name: 'Apple Touch Icon' },
-					{ src: '/icons/web-app-manifest-512x512.png', name: 'Web App Manifest Large' },
-					{ src: '/icons/web-app-manifest-192x192.png', name: 'Web App Manifest Small' },
-					{ src: '/icons/favicon-96x96.png', name: 'Favicon 96x96' },
-					{ src: '/cursors/default.png', name: 'Default Cursor' },
-					{ src: '/cursors/gold.png', name: 'Gold Cursor' },
-					{ src: '/cursors/silver.png', name: 'Silver Cursor' },
-					{ src: '/cursors/trout.png', name: 'Trout Cursor' },
-					{ src: '/cursors/dragon-dagger.png', name: 'Dragon Dagger Cursor' },
-					{ src: '/cursors/dragon-dagger-p.png', name: 'Poison Dragon Dagger Cursor' },
-					{ src: '/cursors/dragon-scimitar.png', name: 'Dragon Scimitar Cursor' }
+					'/login-background.png',
+					'/login-box.png',
+					'/login-button.png',
+					'/button.png',
+					'/panel-background.png',
+					'/background.png',
+					'/chatbox-frame.png',
+					'/chatbox-bg.png',
+					'/scroll-bg.png',
+					'/report-button.png',
+					'/column-separator-ends.png',
+					'/column-separator-middle.png',
+					'/flags.png',
+					'/avatars.png',
+					'/logout-button.png',
+					'/column-bar-texture.png',
+					'/rock-pattern.png',
+					'/tab-buttons.png',
+					'/sorting-arrows.png',
+					'/world-stars.png',
+					'/stats.png',
+					'/rooms-list.png',
+					'/options.png',
+					'/music.png',
+					'/logout.png',
+					'/equipment.png',
+					'/user-list.png',
+					'/new-room.png',
+					'/icons/logo.png',
+					'/icons/favicon.svg',
+					'/icons/apple-touch-icon.png',
+					'/icons/web-app-manifest-512x512.png',
+					'/icons/web-app-manifest-192x192.png',
+					'/icons/favicon-96x96.png',
+					'/cursors/default.png',
+					'/cursors/gold.png',
+					'/cursors/silver.png',
+					'/cursors/trout.png',
+					'/cursors/dragon-dagger.png',
+					'/cursors/dragon-dagger-p.png',
+					'/cursors/dragon-scimitar.png'
 				];
 
+				// Calculate total number of assets and delay per asset
+				const totalAssets = images.length + 3; // +3 for fonts, audio, and server connection
+				const targetTotalTime = 5000; // 5 seconds total
+				const baseDelayPerAsset = Math.floor(targetTotalTime / totalAssets);
+				const minDelay = Math.floor(baseDelayPerAsset * 0.5);
+				const maxDelay = Math.floor(baseDelayPerAsset * 1.5);
+
+				// Define progress ranges for each group
+				const PROGRESS_RANGES = {
+					FONTS: { start: 0, end: 20 },
+					IMAGES: { start: 20, end: 70 },
+					AUDIO: { start: 70, end: 75 },
+					SERVER: { start: 75, end: 85 },
+					FINAL: { start: 85, end: 100 }
+				};
+
+				// Load fonts
+				updateLoadingStatus('Loading Fonts', PROGRESS_RANGES.FONTS.start);
+				await document.fonts.load('1em RuneScape');
+				await document.fonts.load('1em RuneScapeBold');
+				await document.fonts.load('1em RuneScapeSmall');
+				updateLoadingStatus('Loading Fonts', PROGRESS_RANGES.FONTS.end);
+				await new Promise(resolve => setTimeout(resolve, getRandomDelay(minDelay, maxDelay)));
+
+				// Load images
+				updateLoadingStatus('Loading Images', PROGRESS_RANGES.IMAGES.start);
 				for (let i = 0; i < images.length; i++) {
-					const image = images[i];
-					const progress = 25 + Math.floor((i + 1) * (45 / images.length));
-					setLoadingStatus({ text: `Loading ${image.name}`, progress });
+					const progress = PROGRESS_RANGES.IMAGES.start +
+						Math.floor((i + 1) * ((PROGRESS_RANGES.IMAGES.end - PROGRESS_RANGES.IMAGES.start) / images.length));
+					updateLoadingStatus('Loading Images', progress);
 
 					await new Promise((resolve, reject) => {
 						const img = new Image();
 						img.onload = resolve;
 						img.onerror = reject;
-						img.src = image.src;
+						img.src = images[i];
 					});
 
-					await new Promise(resolve => setTimeout(resolve, getRandomDelay(100, 300)));
+					await new Promise(resolve => setTimeout(resolve, getRandomDelay(minDelay, maxDelay)));
 				}
+				updateLoadingStatus('Loading Images', PROGRESS_RANGES.IMAGES.end);
 
 				// Load audio
-				setLoadingStatus({ text: 'Loading Music', progress: 70 });
+				updateLoadingStatus('Loading Music', PROGRESS_RANGES.AUDIO.start);
 				await new Promise((resolve, reject) => {
 					const audio = new Audio('/scape-main.mp3');
 					audio.oncanplaythrough = resolve;
 					audio.onerror = reject;
 					audio.load();
 				});
-				await new Promise(resolve => setTimeout(resolve, getRandomDelay(100, 300)));
+				updateLoadingStatus('Loading Music', PROGRESS_RANGES.AUDIO.end);
+				await new Promise(resolve => setTimeout(resolve, getRandomDelay(minDelay, maxDelay)));
 
 				// Connect to server
-				setLoadingStatus({ text: 'Connecting to Server', progress: 75 });
+				updateLoadingStatus('Connecting to Server', PROGRESS_RANGES.SERVER.start);
 				const wsUrl = import.meta.env.VITE_SERVER_URL || 'ws://localhost:3001';
 				const ws = new WebSocket(wsUrl);
 
@@ -114,16 +137,17 @@ function LoadingScreen({ onLoadComplete }: LoadingScreenProps) {
 				});
 
 				ws.close();
+				updateLoadingStatus('Connecting to Server', PROGRESS_RANGES.SERVER.end);
 
 				// Final steps
-				setLoadingStatus({ text: 'Verifying Connection', progress: 85 });
-				await new Promise(resolve => setTimeout(resolve, getRandomDelay(300, 500)));
+				updateLoadingStatus('Verifying Connection', PROGRESS_RANGES.FINAL.start);
+				await new Promise(resolve => setTimeout(resolve, getRandomDelay(minDelay, maxDelay)));
 
-				setLoadingStatus({ text: 'Initializing Chat', progress: 95 });
-				await new Promise(resolve => setTimeout(resolve, getRandomDelay(300, 500)));
+				updateLoadingStatus('Initializing Chat', Math.floor((PROGRESS_RANGES.FINAL.start + PROGRESS_RANGES.FINAL.end) / 2));
+				await new Promise(resolve => setTimeout(resolve, getRandomDelay(minDelay, maxDelay)));
 
-				setLoadingStatus({ text: 'Complete', progress: 100 });
-				await new Promise(resolve => setTimeout(resolve, 1000));
+				updateLoadingStatus('Complete', PROGRESS_RANGES.FINAL.end);
+				await new Promise(resolve => setTimeout(resolve, 500)); // Shorter final delay
 				onLoadComplete();
 			} catch (err) {
 				console.error('Loading error:', err);
