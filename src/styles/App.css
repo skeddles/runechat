@@ -791,6 +791,11 @@ button.standard {
 	pointer-events: none;
 	text-shadow: none;
 	line-height: 1;
+	display: none;
+}
+
+.tooltip-container:hover .tooltip {
+	display: block;
 }
 
 .loading-screen {

@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import Tooltip from './Tooltip';
 import '../styles/TabBar.css';
 
 export interface Tab {
@@ -29,13 +30,14 @@ function TabBar({ tabs, selectedTab, onTabSelect, position, isFirst, isLast }: T
 					}`;
 
 				return (
-					<button
-						key={tab.id}
-						className={buttonClass}
-						onClick={() => onTabSelect(tab.id)}
-					>
-						<img src={`/${tab.icon}`} alt={tab.label} />
-					</button>
+					<Tooltip key={tab.id} text={tab.label}>
+						<button
+							className={buttonClass}
+							onClick={() => onTabSelect(tab.id)}
+						>
+							<img src={`/${tab.icon}`} alt={tab.label} />
+						</button>
+					</Tooltip>
 				);
 			})}
 		</div>
