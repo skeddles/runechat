@@ -3,12 +3,14 @@ import { useState, useEffect } from 'react';
 import Login from './Login';
 import Chat from './Chat';
 import Toast from './Toast';
+import LoadingScreen from './LoadingScreen';
 import '../styles/App.css';
 import '../styles/text-effects.css';
 
 function App() {
 	const [username, setUsername] = useState<string | null>(null);
 	const [toast, setToast] = useState<{ message: string; key: number } | null>(null);
+	const [isLoading, setIsLoading] = useState(true);
 
 	useEffect(() => {
 		const savedUsername = localStorage.getItem('username');
@@ -25,6 +27,10 @@ function App() {
 	const showToast = (message: string) => {
 		setToast({ message, key: Date.now() });
 	};
+
+	if (isLoading) {
+		return <LoadingScreen onLoadComplete={() => setIsLoading(false)} />;
+	}
 
 	return (
 		<Router>
