@@ -620,13 +620,13 @@ button.standard {
 		top: 0;
 		left: 0;
 		right: 0;
-		height: 22px;
+		height: 21px;
 		background-image: url('/column-separator-ends.png');
 		background-position: 0 0;
 		background-repeat: no-repeat;
-		background-size: 25px 28px;
+		background-size: 26px 28px;
 		background-clip: content-box;
-		clip-path: inset(0 0 calc(100% - 22px) 0);
+		clip-path: inset(0 0 calc(100% - 21px) 0);
 	}
 
 	&::after {
@@ -646,7 +646,7 @@ button.standard {
 
 	.middle {
 		position: absolute;
-		top: 22px;
+		top: 21px;
 		bottom: 7px;
 		left: 0;
 		right: 0;
