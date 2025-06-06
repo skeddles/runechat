@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import Tooltip from './Tooltip';
 
 interface ChatProps {
 	username: string;
@@ -190,25 +191,47 @@ function Chat({ username, onShowToast, showWelcomeToast }: ChatProps) {
 	return (
 		<div className="chat-container">
 			<div className="rooms-panel">
-				<h2>Worlds</h2>
+				<Tooltip text="List of chatrooms">
+					<h2>Worlds</h2>
+				</Tooltip>
 				<div className="room-list">
 					<table className="room-table">
 						<thead>
 							<tr>
 								<th onClick={() => handleSort('starId')}>
-									<span className={`sort-icon ${sortConfig.key === 'starId' ? `active ${sortConfig.direction}` : ''}`} />
+									<Tooltip text="Sort by star level">
+										<div style={{ width: '100%', height: '100%' }}>
+											<span className={`sort-icon ${sortConfig.key === 'starId' ? `active ${sortConfig.direction}` : ''}`} />
+										</div>
+									</Tooltip>
 								</th>
 								<th onClick={() => handleSort('worldId')}>
-									<span className={`sort-icon ${sortConfig.key === 'worldId' ? `active ${sortConfig.direction}` : ''}`} />
+									<Tooltip text="Sort by world number">
+										<div style={{ width: '100%', height: '100%' }}>
+											<span className={`sort-icon ${sortConfig.key === 'worldId' ? `active ${sortConfig.direction}` : ''}`} />
+										</div>
+									</Tooltip>
 								</th>
 								<th onClick={() => handleSort('flagId')}>
-									<span className={`sort-icon ${sortConfig.key === 'flagId' ? `active ${sortConfig.direction}` : ''}`} />
+									<Tooltip text="Sort by flag">
+										<div style={{ width: '100%', height: '100%' }}>
+											<span className={`sort-icon ${sortConfig.key === 'flagId' ? `active ${sortConfig.direction}` : ''}`} />
+										</div>
+									</Tooltip>
 								</th>
 								<th onClick={() => handleSort('userCount')}>
-									<span className={`sort-icon ${sortConfig.key === 'userCount' ? `active ${sortConfig.direction}` : ''}`} />
+									<Tooltip text="Sort by player count">
+										<div style={{ width: '100%', height: '100%' }}>
+											<span className={`sort-icon ${sortConfig.key === 'userCount' ? `active ${sortConfig.direction}` : ''}`} />
+										</div>
+									</Tooltip>
 								</th>
 								<th onClick={() => handleSort('id')}>
-									<span className={`sort-icon ${sortConfig.key === 'id' ? `active ${sortConfig.direction}` : ''}`} />
+									<Tooltip text="Sort by world name">
+										<div style={{ width: '100%', height: '100%' }}>
+											<span className={`sort-icon ${sortConfig.key === 'id' ? `active ${sortConfig.direction}` : ''}`} />
+										</div>
+									</Tooltip>
 								</th>
 							</tr>
 						</thead>
@@ -251,7 +274,9 @@ function Chat({ username, onShowToast, showWelcomeToast }: ChatProps) {
 							placeholder="New room name"
 						/>
 					</label>
-					<button type="submit" className="standard">Create</button>
+					<Tooltip text="Create a new world">
+						<button type="submit" className="standard">Create</button>
+					</Tooltip>
 				</form>
 			</div>
 
@@ -282,7 +307,9 @@ function Chat({ username, onShowToast, showWelcomeToast }: ChatProps) {
 						onChange={(e) => setNewMessage(e.target.value)}
 						placeholder="*"
 					/>
-					<button type="submit" className="standard">Send</button>
+					<Tooltip text={`Send this message to ${roomId || 'public'}`}>
+						<button type="submit" className="standard">Send</button>
+					</Tooltip>
 				</form>
 			</div>
 
@@ -291,7 +318,9 @@ function Chat({ username, onShowToast, showWelcomeToast }: ChatProps) {
 			</div>
 
 			<div className="users-panel">
-				<h2>Players</h2>
+				<Tooltip text="List of users in this chatroom">
+					<h2>Players</h2>
+				</Tooltip>
 				<div className="user-list">
 					{users.map(user => (
 						<div key={user} className="user-item">
