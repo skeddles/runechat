@@ -44,11 +44,11 @@ interface Stats {
 }
 
 // Text effect types
-type TextEffect = 'wave' | 'scroll' | 'slide' | 'flash1' | 'flash2' | 'flash3' | 'glow1' | 'glow2' | 'glow3';
+type TextEffect = 'wave' | 'scroll' | 'slide' | 'flash1' | 'flash2' | 'flash3' | 'glow1' | 'glow2' | 'glow3' | 'yellow' | 'red' | 'green' | 'cyan' | 'purple' | 'white';
 
 // Function to process message content and extract effect
 function processMessageContent(content: string): { effect: TextEffect | null; text: string } {
-	const effectMatch = content.match(/^(wave|scroll|slide|flash1|flash2|flash3|glow1|glow2|glow3):/);
+	const effectMatch = content.match(/^(wave|scroll|slide|flash1|flash2|flash3|glow1|glow2|glow3|yellow|red|green|cyan|purple|white):/);
 	if (effectMatch) {
 		return {
 			effect: effectMatch[1] as TextEffect,

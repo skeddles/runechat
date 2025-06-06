@@ -243,3 +243,28 @@
 .text-effect.glow3 {
 	animation: glow3 3s linear infinite;
 }
+
+/* Color Effect Classes */
+.text-effect.yellow {
+	color: #fbff4a;
+}
+
+.text-effect.red {
+	color: #FF0000;
+}
+
+.text-effect.green {
+	color: #00FF00;
+}
+
+.text-effect.cyan {
+	color: #00FFFF;
+}
+
+.text-effect.purple {
+	color: #FF00FF;
+}
+
+.text-effect.white {
+	color: #FFFFFF;
+}
